@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace AppsInteligentes\EmailTracking;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
+use AppsInteligentes\EmailTracking\Commands\EmailTrackingCommand;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class EmailTrackingServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,10 +16,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('skeleton')
+            ->name('email-tracking')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_skeleton_table')
-            ->hasCommand(SkeletonCommand::class);
+            ->hasMigration('create_email-tracking_table')
+            ->hasCommand(EmailTrackingCommand::class);
     }
 }

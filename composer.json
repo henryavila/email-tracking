@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "apps-inteligentes/email-tracking",
+    "description": "This is my package email-tracking",
     "keywords": [
-        ":vendor_name",
+        "apps-inteligentes",
         "laravel",
-        ":package_slug"
+        "email-tracking"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/apps-inteligentes/email-tracking",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Henry Ávila",
+            "email": "dev@henryavila.com",
             "role": "Developer"
         }
     ],
@@ -34,13 +34,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "AppsInteligentes\\EmailTracking\\": "src",
+            "AppsInteligentes\\EmailTracking\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "AppsInteligentes\\EmailTracking\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -49,15 +49,19 @@
         "test-coverage": "vendor/bin/pest --coverage"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "AppsInteligentes\\EmailTracking\\EmailTrackingServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "EmailTracking": "AppsInteligentes\\EmailTracking\\Facades\\EmailTracking"
             }
         }
     },

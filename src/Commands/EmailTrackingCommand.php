@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace AppsInteligentes\EmailTracking\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class EmailTrackingCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'email-tracking';
 
     public $description = 'My command';
 
