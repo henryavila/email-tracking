@@ -2,7 +2,6 @@
 
 namespace AppsInteligentes\EmailTracking;
 
-use AppsInteligentes\EmailTracking\Commands\EmailTrackingCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -20,7 +19,6 @@ class EmailTrackingServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasTranslations()
             ->hasRoute('webhooks')
-            ->hasMigration('create_emails_table')
-            ->hasCommand(EmailTrackingCommand::class);
+            ->hasMigration('create_emails_table');
     }
 }

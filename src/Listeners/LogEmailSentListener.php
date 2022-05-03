@@ -17,7 +17,6 @@ class LogEmailSentListener
      */
     public function handle(MessageSent $event)
     {
-        ray($event);
         $data = [
             'message_id' => preg_replace('([<>])', '', $event->sent->getMessageId()),
             'subject'    => $event->message->getSubject(),
@@ -41,6 +40,7 @@ class LogEmailSentListener
 
 
         $model = $event->data['model'] ?? null;
+
         if ($model && is_object($model) && method_exists($model, 'emails')) {
             $model->emails()->create($data);
         } else {

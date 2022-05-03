@@ -138,9 +138,9 @@ must be overwritten by this one:
 ```php
 class SampleMail extends \AppsInteligentes\EmailTracking\Mail\TrackableMail
 {
-    public function __construct(protected \Illuminate\Database\Eloquent\Model $modelSender)
+    public function __construct(public \Illuminate\Database\Eloquent\Model $model)
     {
-        parent::__construct($modelSender, 'emails.sample');
+        parent::__construct($model, 'emails.sample');
     }
 
     public function build(): void
@@ -157,7 +157,7 @@ This new code will pass in the constructor the model that is the email sender.
 At this point, in `build()` method, you can continue to setup the mailable, but know that the view is already defined. 
 If you call the view method again, the sender configuration will be overwritten.
 
-To send the Mailable, just pass the modelSender in the mailable constructor 
+To send the Mailable, just pass the model in the mailable constructor 
 ```php
 // example: Send the Sample Mail to User with id 1
 $user = User::find(1);
@@ -181,14 +181,14 @@ public function toMail($notifiable): MailMessage
 with this code:
 
 ```php
-public function __construct(protected \Illuminate\Database\Eloquent\Model $modelSender)
+public function __construct(public \Illuminate\Database\Eloquent\Model $model)
 {
     //
 }
 
 public function toMail($notifiable): MailMessage
 {
-    return (new \AppsInteligentes\EmailTracking\Notifications\TrackableNotificationMailMessage($this->modelSender))
+    return (new \AppsInteligentes\EmailTracking\Notifications\TrackableNotificationMailMessage($this->model))
         ->line('The introduction to the notification.')
         ->action('Notification Action', url('/'))
         ->line('Thank you for using our application!');

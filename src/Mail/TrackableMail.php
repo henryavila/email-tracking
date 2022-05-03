@@ -13,7 +13,7 @@ class TrackableMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(protected Model $modelSender, protected string $viewName)
+    public function __construct(public Model $model, public string $viewName)
     {
 
     }
@@ -23,7 +23,7 @@ class TrackableMail extends Mailable implements ShouldQueue
         $this->view(
             $this->viewName, [
                 // The $model variable will be used in VIEW and in LogEmailSentListener class
-                'model' => $this->modelSender
+                'model' => $this->model
             ]
         );
     }

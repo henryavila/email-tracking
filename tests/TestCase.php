@@ -2,9 +2,9 @@
 
 namespace AppsInteligentes\EmailTracking\Tests;
 
+use AppsInteligentes\EmailTracking\EmailTrackingServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use AppsInteligentes\EmailTracking\EmailTrackingServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'AppsInteligentes\\EmailTracking\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'AppsInteligentes\\EmailTracking\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
@@ -26,11 +26,21 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        config()->set('services.mailgun.secret', 'key-9999999999999999999999999');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_email-tracking_table.php.stub';
+
+        $migration = include __DIR__.'/../database/migrations/create_emails_table.php.stub';
         $migration->up();
-        */
+
+    }
+
+    /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadLaravelMigrations();
     }
 }
