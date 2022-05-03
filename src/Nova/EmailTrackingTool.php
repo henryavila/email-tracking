@@ -25,7 +25,6 @@ class EmailTrackingTool extends \Laravel\Nova\Tool
         Gate::policy(Email::class, $this->emailPolicy);
     }
 
-
     public function emailResource(string $emailResource): EmailTrackingTool
     {
         $this->emailResource = $emailResource;

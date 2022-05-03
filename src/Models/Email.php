@@ -2,16 +2,9 @@
 
 namespace AppsInteligentes\EmailTracking\Models;
 
-use App\Nova\Resources\AutomaticMailResource;
-use App\Nova\Resources\GecacNotificationResource;
-use App\Nova\Resources\GefisNotificationResource;
-use App\Nova\Resources\LgpdRequestResource;
-use App\Nova\Resources\MailingSubscribeResource;
-use App\Nova\Resources\UserResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Nova\Fields\MorphTo;
-
 
 /**
  * @property int id
@@ -43,21 +36,20 @@ use Laravel\Nova\Fields\MorphTo;
 class Email extends Model
 {
     protected $dates = [
-        'delivered_at', 'failed_at', 'last_opened_at', 'last_clicked_at', 'first_opened_at', 'first_clicked_at'
+        'delivered_at', 'failed_at', 'last_opened_at', 'last_clicked_at', 'first_opened_at', 'first_clicked_at',
     ];
 
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     protected $casts = [
-        'message_id'               => 'string',
+        'message_id' => 'string',
         'delivery_status_attempts' => 'int',
-        'sender_id'                => 'int',
-        'opened'                   => 'int',
-        'clicked'                  => 'int',
+        'sender_id' => 'int',
+        'opened' => 'int',
+        'clicked' => 'int',
     ];
-
 
     public function sender(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {

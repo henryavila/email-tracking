@@ -18,6 +18,7 @@ class TrackableNotificationMailMessage extends MailMessage
     {
         $array = parent::toArray();
         $array['model'] = $this->model;
+
         return $array;
     }
 }

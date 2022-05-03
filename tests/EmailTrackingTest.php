@@ -66,7 +66,7 @@ it('create a email object on custom Mailable send', function () {
 
         \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
         \Pest\Laravel\assertDatabaseHas((new Email())->getTable(), [
-            'id' => 1
+            'id' => 1,
         ]);
         $mailLog = Email::find(1);
 
@@ -129,7 +129,7 @@ it('create a email object on custom Notification send', function () {
 
         \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
         \Pest\Laravel\assertDatabaseHas((new Email())->getTable(), [
-            'id' => 1
+            'id' => 1,
         ]);
         $mailLog = Email::find(1);
 
@@ -178,7 +178,6 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     \PHPUnit\Framework\assertNull($emailLog->first_clicked_at);
     \PHPUnit\Framework\assertNull($emailLog->last_opened_at);
     \PHPUnit\Framework\assertNull($emailLog->last_clicked_at);
-
 });
 
 
@@ -268,95 +267,98 @@ function getMailGunRequestData(Email $emailLog, string $event): array
     $token = "999999999999999999999999999999999999999999";
 
     $baseData = [
-        "signature"  => [
-            "token"     => $token,
+        "signature" => [
+            "token" => $token,
             "timestamp" => $timestamp,
-            "signature" => hash_hmac('sha256', $timestamp . $token, config('services.mailgun.secret'))
+            "signature" => hash_hmac('sha256', $timestamp . $token, config('services.mailgun.secret')),
         ],
-        "event-data" => []
+        "event-data" => [],
     ];
 
     switch ($event) {
         case 'delivered':
             $baseData['event-data'] = [
-                "event"           => "delivered",
-                "message"         => [
+                "event" => "delivered",
+                "message" => [
                     "headers" => [
-                        "to"         => $emailLog->to,
+                        "to" => $emailLog->to,
                         "message-id" => $emailLog->message_id,
-                        "from"       => $emailLog->subject,
-                        "subject"    => "message subject"
+                        "from" => $emailLog->subject,
+                        "subject" => "message subject",
                     ],
                 ],
                 "delivery-status" => [
-                    "tls"             => true,
-                    "mx-host"         => "mx.gmail.com",
-                    "code"            => 250,
-                    "description"     => "",
+                    "tls" => true,
+                    "mx-host" => "mx.gmail.com",
+                    "code" => 250,
+                    "description" => "",
                     "session-seconds" => 56.981908082962,
-                    "attempt-no"      => 1,
-                    "message"         => "OK"
-                ]
+                    "attempt-no" => 1,
+                    "message" => "OK",
+                ],
             ];
+
             break;
 
         case 'clicked':
             $baseData['event-data'] = [
-                "event"       => "clicked",
+                "event" => "clicked",
                 "geolocation" => [
                     "country" => "US",
-                    "region"  => "Unknown",
-                    "city"    => "Unknown"
+                    "region" => "Unknown",
+                    "city" => "Unknown",
                 ],
-                "tags"        => [
+                "tags" => [
                 ],
-                "url"         => "https://sample.amazonaws.comY999999999999999999999999999.pdf",
-                "ip"          => "1.1.1.1",
-                "log-level"   => "info",
-                "timestamp"   => 1651584901.9819,
+                "url" => "https://sample.amazonaws.comY999999999999999999999999999.pdf",
+                "ip" => "1.1.1.1",
+                "log-level" => "info",
+                "timestamp" => 1651584901.9819,
                 "client-info" => [
                     "client-name" => "Chrome",
                     "client-type" => "browser",
-                    "user-agent"  => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36",
+                    "user-agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36",
                     "device-type" => "desktop",
-                    "client-os"   => "Windows"
+                    "client-os" => "Windows",
                 ],
-                "message"     => [
+                "message" => [
                     "headers" => [
-                        "message-id" => $emailLog->message_id
-                    ]
+                        "message-id" => $emailLog->message_id,
+                    ],
                 ],
-                "recipient"   => $emailLog->to,
+                "recipient" => $emailLog->to,
             ];
+
             break;
 
         case 'opened':
             $baseData['event-data'] = [
-                "event"            => "opened",
-                "geolocation"      => [
+                "event" => "opened",
+                "geolocation" => [
                     "country" => "US",
-                    "region"  => "Unknown",
-                    "city"    => "Unknown"
+                    "region" => "Unknown",
+                    "city" => "Unknown",
                 ],
-                "ip"               => "1.1.1.1",
+                "ip" => "1.1.1.1",
                 "recipient-domain" => $emailLog->to,
-                "id"               => "9999999999999999999",
-                "log-level"        => "info",
-                "timestamp"        => 1651584876.2409,
-                "client-info"      => [
+                "id" => "9999999999999999999",
+                "log-level" => "info",
+                "timestamp" => 1651584876.2409,
+                "client-info" => [
                     "client-name" => "Firefox",
                     "client-type" => "browser",
-                    "user-agent"  => "Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)",
+                    "user-agent" => "Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)",
                     "device-type" => "desktop",
-                    "client-os"   => "Windows"
+                    "client-os" => "Windows",
                 ],
-                "message"          => [
+                "message" => [
                     "headers" => [
-                        "message-id" => $emailLog->message_id
-                    ]
+                        "message-id" => $emailLog->message_id,
+                    ],
                 ],
-                "recipient"        => $emailLog->to,
+                "recipient" => $emailLog->to,
             ];
+
             break;
     }
 
@@ -375,5 +377,4 @@ function copyViewFiles(): void
         __DIR__ . "{$ds}..{$ds}resources{$ds}views{$ds}emails " .
         __DIR__ . "{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
     );
-
 }

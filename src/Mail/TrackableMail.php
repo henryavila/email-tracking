@@ -15,15 +15,15 @@ class TrackableMail extends Mailable implements ShouldQueue
 
     public function __construct(public Model $model, public string $viewName)
     {
-
     }
 
     public function build(): void
     {
         $this->view(
-            $this->viewName, [
+            $this->viewName,
+            [
                 // The $model variable will be used in VIEW and in LogEmailSentListener class
-                'model' => $this->model
+                'model' => $this->model,
             ]
         );
     }

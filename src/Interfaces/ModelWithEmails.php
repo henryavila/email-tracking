@@ -11,5 +11,4 @@ interface ModelWithEmails
      * @return MorphMany
      */
     public function emails(): MorphMany;
-
 }

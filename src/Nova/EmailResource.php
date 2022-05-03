@@ -51,7 +51,6 @@ class EmailResource extends Resource
         return Email::class;
     }
 
-
     /**
      * Determine if this resource is available for navigation.
      *
@@ -86,7 +85,7 @@ class EmailResource extends Resource
      * @var array
      */
     public static $search = [
-        'message_id', 'subject', 'to', 'cc', 'bcc', 'reply_to'
+        'message_id', 'subject', 'to', 'cc', 'bcc', 'reply_to',
     ];
 
     /**
@@ -165,7 +164,6 @@ class EmailResource extends Resource
         ];
     }
 
-
     public function fieldsForIndex(NovaRequest $request)
     {
         return [
@@ -182,17 +180,16 @@ class EmailResource extends Resource
             Text::make(__('email-tracking::resources.subject'), 'subject')->sortable(),
             Text::make(__('email-tracking::resources.mail_to'), 'to')->sortable(),
 
-            Number::make(__('email-tracking::resources.delivered'), fn() => null)
+            Number::make(__('email-tracking::resources.delivered'), fn () => null)
                 ->textAlign('center')
-                ->canSee(fn() => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
+                ->canSee(fn () => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
 
             //delivered_at or failed_at are defined
-            Boolean::make(__('email-tracking::resources.delivered'), fn() => isset($this->model()->delivered_at))
-                ->canSee(fn() => !empty($this->model()->delivered_at) || !empty($this->model()->failed_at)),
+            Boolean::make(__('email-tracking::resources.delivered'), fn () => isset($this->model()->delivered_at))
+                ->canSee(fn () => ! empty($this->model()->delivered_at) || ! empty($this->model()->failed_at)),
 
         ];
     }
-
 
     /**
      * Get the cards available for the request.
@@ -238,7 +235,6 @@ class EmailResource extends Resource
         return [];
     }
 
-
     /**
      * Build an "index" query for the given resource.
      *
@@ -262,7 +258,6 @@ class EmailResource extends Resource
 
         return $query;
     }
-
 
     /**
      * @param string $FullClassName must implement TrackableEmailNotificationModelInterface
