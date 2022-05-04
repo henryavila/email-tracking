@@ -8,7 +8,7 @@ use Gate;
 
 class EmailTrackingTool extends \Laravel\Nova\Tool
 {
-    public string $emailResource = EmailResource::class;
+    public static string $emailResource = EmailResource::class;
     public string $emailPolicy = EmailPolicy::class;
 
     /**
@@ -19,7 +19,7 @@ class EmailTrackingTool extends \Laravel\Nova\Tool
     public function boot()
     {
         \Laravel\Nova\Nova::resources([
-            $this->emailResource,
+            static::$emailResource,
         ]);
 
         Gate::policy(Email::class, $this->emailPolicy);
@@ -27,7 +27,7 @@ class EmailTrackingTool extends \Laravel\Nova\Tool
 
     public function emailResource(string $emailResource): EmailTrackingTool
     {
-        $this->emailResource = $emailResource;
+        static::$emailResource = $emailResource;
 
         return $this;
     }

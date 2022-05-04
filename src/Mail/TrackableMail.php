@@ -4,7 +4,6 @@ namespace AppsInteligentes\EmailTracking\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -13,7 +12,7 @@ class TrackableMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public Model $model, public string $viewName)
+    public function __construct(public $model, public string $viewName)
     {
     }
 
