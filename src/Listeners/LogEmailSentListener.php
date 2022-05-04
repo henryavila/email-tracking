@@ -19,22 +19,22 @@ class LogEmailSentListener
     {
         $data = [
             'message_id' => preg_replace('([<>])', '', $event->sent->getMessageId()),
-            'subject'    => $event->message->getSubject(),
+            'subject' => $event->message->getSubject(),
 
             'to' => collect($event->message->getTo())
-                ->map(fn(Address $address) => $address->getAddress())
+                ->map(fn (Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'cc' => collect($event->message->getCc())
-                ->map(fn(Address $address) => $address->getAddress())
+                ->map(fn (Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'bcc' => collect($event->message->getBcc())
-                ->map(fn(Address $address) => $address->getAddress())
+                ->map(fn (Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'reply_to' => collect($event->message->getReplyTo())
-                ->map(fn(Address $address) => $address->getAddress())
+                ->map(fn (Address $address) => $address->getAddress())
                 ->implode(', '),
         ];
 

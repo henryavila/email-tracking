@@ -37,7 +37,7 @@ class MailgunWebhookController extends Controller
                 Log::warning('Empty messageId on Mailgun hook', [
                     'message' => $data['message'] ?? null,
                     'headers' => $data['message']['headers'] ?? null,
-                    'full'    => $data
+                    'full' => $data,
                 ]);
             }
 
@@ -82,5 +82,4 @@ class MailgunWebhookController extends Controller
             Log::error('Mailgun webhook', $exception);
         }
     }
-
 }

@@ -5,7 +5,6 @@ namespace AppsInteligentes\EmailTracking\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
  * @property int id
  * @property string message_id
@@ -36,21 +35,20 @@ use Illuminate\Database\Eloquent\Model;
 class Email extends Model
 {
     protected $dates = [
-        'delivered_at', 'failed_at', 'last_opened_at', 'last_clicked_at', 'first_opened_at', 'first_clicked_at'
+        'delivered_at', 'failed_at', 'last_opened_at', 'last_clicked_at', 'first_opened_at', 'first_clicked_at',
     ];
 
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     protected $casts = [
-        'message_id'               => 'string',
+        'message_id' => 'string',
         'delivery_status_attempts' => 'int',
-        'sender_id'                => 'int',
-        'opened'                   => 'int',
-        'clicked'                  => 'int',
+        'sender_id' => 'int',
+        'opened' => 'int',
+        'clicked' => 'int',
     ];
-
 
     public function sender(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
