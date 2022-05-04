@@ -2,15 +2,8 @@
 
 namespace AppsInteligentes\EmailTracking\Models;
 
-use App\Nova\Resources\AutomaticMailResource;
-use App\Nova\Resources\GecacNotificationResource;
-use App\Nova\Resources\GefisNotificationResource;
-use App\Nova\Resources\LgpdRequestResource;
-use App\Nova\Resources\MailingSubscribeResource;
-use App\Nova\Resources\UserResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Nova\Fields\MorphTo;
 
 
 /**
@@ -62,16 +55,5 @@ class Email extends Model
     public function sender(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
         return $this->morphTo();
-    }
-
-    /**
-     * Laravel Nova Field
-     */
-    public static function getMorphResourceField(): MorphTo
-    {
-        return MorphTo::make('sender')
-            ->types(config('email-tracking.resources'))
-            ->nullable()
-            ->searchable();
     }
 }

@@ -37,20 +37,6 @@ Publish the lang files (optional) with:
 php artisan vendor:publish --tag="email-tracking-translations"
 ```
 
-This is the contents of the published config file:
-(Add to resources array, the FQDN of all Nova Resource of models that can send email)
-
-```php
-return [
-
-    /**
-     * FQDN of all Nova Resources related to models that can send a trackable email
-     */
-    'resources' => [
-
-    ],
-];
-```
 
 ---
 
@@ -87,15 +73,6 @@ If you need to customize the Nova Resource, just create a new one extendind `App
 ---
 
 
-On your `User` model, add the interface and implement the `EmailTrackingUserInterface`
-```php
-public function isSuperAdmin(): bool
-    {
-        // Implement here the logic to define if the current logged user is a SuperAdmin.
-        // this means that the user will be able to see all e-mail logs
-    };
-```
-
 On all models that can send e-mail, implement the interface `ModelWithEmails` and add the trait `ModelWithEmailsSenderTrait`
 
 
@@ -117,7 +94,7 @@ On `EventServiceProvider.php`, add the code
 At this point, all e-mail sent from app, will be logged on the app, but the sender will not be saved
 
 
-## Save the Email sander
+## Save the Email sender
 To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`. the default mail can't define the sender (like Nova Reset password e-mail)
 
 ### Mailable
@@ -201,6 +178,21 @@ To send the notification
 // User with id 1 send the sample notification to multiple $clientes
 $user = User::find(1);
 Notification::send($clientes, new SampleNotification($user));
+```
+
+---
+
+## Displaying the e-mails from sender
+To be able to display the e-mails sent from a send, add this code in the `fields()` method on nova resource
+```php
+public function fields(Request $request)
+{
+    return [
+        ...
+        \AppsInteligentes\EmailTracking\EmailTracking::hasManyEmailsField(),
+        ...
+    ];
+}
 ```
 
 ---

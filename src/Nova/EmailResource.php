@@ -3,13 +3,11 @@
 namespace AppsInteligentes\EmailTracking\Nova;
 
 use AppsInteligentes\EmailTracking\Models\Email;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -111,7 +109,7 @@ class EmailResource extends Resource
                 ->locale(str_replace('_', '-', config('app.locale')))
                 ->withTime(),
 
-            Email::getMorphResourceField(),
+            MorphTo::make('sender')->searchable(),
 
             Panel::make(__('email-tracking::resources.email'), [
                 Text::make(__('email-tracking::resources.subject'), 'subject'),
@@ -177,7 +175,7 @@ class EmailResource extends Resource
                 ->locale(str_replace('_', '-', config('app.locale')))
                 ->withTime(),
 
-            Email::getMorphResourceField(),
+            MorphTo::make('sender')->searchable(),
 
             Text::make(__('email-tracking::resources.subject'), 'subject')->sortable(),
             Text::make(__('email-tracking::resources.mail_to'), 'to')->sortable(),
@@ -238,61 +236,4 @@ class EmailResource extends Resource
         return [];
     }
 
-
-    /**
-     * Build an "index" query for the given resource.
-     *
-     * @param NovaRequest $request
-     * @param Builder $query
-     * @return Builder
-     */
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        /** @var User $user */
-        $user = $request->user();
-
-        // Super Admin Can access EVERYTHING
-        if ($user->isSuperAdmin()) {
-            return $query;
-        }
-
-        foreach (TrackableEmailNotification::CLASSES as $class) {
-            self::filterIndexForTrackableEmailNotification($class, $request, $query);
-        }
-
-        return $query;
-    }
-
-
-    /**
-     * @param string $FullClassName must implement TrackableEmailNotificationModelInterface
-     * @param NovaRequest $request
-     * @param Builder $query
-     */
-    private static function filterIndexForTrackableEmailNotification(string $FullClassName, NovaRequest $request, Builder $query)
-    {
-        /** @var User $user */
-        $user = $request->user();
-        $referenceModel = new $FullClassName();
-
-        // Can see all Trackable Email Notifications
-        if ($user->can($FullClassName::getManageNotificationPermission())) {
-            $query->where('sender_type', '=', $FullClassName); // Can see all e-mail sent by GefisNotification
-
-            return;
-        }
-
-        // Can see just their own Trackable Email Notification
-        if ($user->can($FullClassName::getSendNotificationPermission())) {
-            $notificationTable = $referenceModel->getTable();
-            $emailsTable = (new Email())->getTable();
-
-            $query->where('sender_type', '=', $FullClassName)
-                ->select("emails.*") // If not defined, the id of notification will be returned instead of the emails id breaking the list screen
-                ->join($notificationTable, function (JoinClause $join) use ($notificationTable, $emailsTable, $user) {
-                    $join->on("{$notificationTable}.id", '=', "{$emailsTable}.sender_id")
-                        ->on("{$notificationTable}.user_id", '=', DB::raw($user->id));
-                });
-        }
-    }
 }
