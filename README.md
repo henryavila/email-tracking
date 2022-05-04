@@ -1,5 +1,10 @@
 Rastreamento de e-mail Integrado ao Laravel Nova
 
+
+## Mailgun configuration
+On mailgun interface, add a `webhook` to the url `APP_URL/webhooks/mailgun`
+
+
 ## Installation
 
 Setup Laravel Mail with mailgun at https://laravel.com/docs/master/mail#mailgun-driver
@@ -10,7 +15,6 @@ MAIL_MAILER=mailgun
 MAILGUN_DOMAIN=yourdomain.com
 MAILGUN_SECRET=key-99999999999999999999999999999999
 ```
-
 
 Install the package via composer:
 
