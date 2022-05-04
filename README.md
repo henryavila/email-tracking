@@ -71,7 +71,7 @@ If you need to customize the Nova Resource, just create a new one extendind `App
 ---
 
 
-On all models that can send e-mail, implement the interface `ModelWithEmails` and add the trait `ModelWithEmailsSenderTrait`
+On all models that can send e-mail, and add the trait `ModelWithEmailsSenderTrait`
 
 
 

@@ -2,7 +2,6 @@
 
 namespace AppsInteligentes\EmailTracking\Notifications;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 
 /**
@@ -10,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
  */
 class TrackableNotificationMailMessage extends MailMessage
 {
-    public function __construct(public Model $model)
+    public function __construct(public $model)
     {
     }
 
