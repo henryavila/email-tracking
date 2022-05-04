@@ -232,5 +232,4 @@ class EmailResource extends Resource
     {
         return [];
     }
-
 }
