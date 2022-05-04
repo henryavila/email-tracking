@@ -2,6 +2,14 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
+## v.1.0.2 - 2022-05-04
+
+## What's Changed
+
+- php version required 8.0.2 by @henryavila in https://github.com/apps-inteligentes/email-tracking/pull/2
+
+**Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/1.0.1...1.0.2
+
 ## 1.0.1 - 2022-05-04
 
 ## What's Changed
