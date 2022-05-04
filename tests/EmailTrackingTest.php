@@ -310,7 +310,7 @@ function getMailGunRequestData(Email $emailLog, string $event): array
                 ],
                 "tags" => [
                 ],
-                "url" => "https://sample.amazonaws.comY999999999999999999999999999.pdf",
+                "url" => "https://sample.amazonaws.com/999999999999999999999999999.pdf",
                 "ip" => "1.1.1.1",
                 "log-level" => "info",
                 "timestamp" => 1651584901.9819,
