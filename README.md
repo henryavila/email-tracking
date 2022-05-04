@@ -29,12 +29,6 @@ php artisan vendor:publish --tag="email-tracking-migrations"
 php artisan migrate
 ```
 
-Publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="email-tracking-config"
-```
-
 Publish the lang files (optional) with:
 
 ```bash
