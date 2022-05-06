@@ -50,6 +50,16 @@ class Email extends Model
         'clicked' => 'int',
     ];
 
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        if (config('email-tracking.email-db-connection') !== null) {
+            $this->setConnection(config('email-tracking.email-db-connection'));
+        }
+    }
+
     public function sender(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
         return $this->morphTo();

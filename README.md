@@ -29,6 +29,28 @@ php artisan vendor:publish --tag="email-tracking-migrations"
 php artisan migrate
 ```
 
+
+Publish the config file with:
+
+```bash
+php artisan vendor:publish --tag="email-tracking-config"
+```
+
+
+This is the contents of the published config file:
+
+```php
+return [
+
+    /**
+     * if defined, the Email model will use this database connection.
+     * This connection name must be defined in database.connections config file
+     */
+    'email-db-connection' => null
+];
+``
+
+
 Publish the lang files (optional) with:
 
 ```bash
