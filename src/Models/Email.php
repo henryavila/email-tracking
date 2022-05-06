@@ -50,7 +50,6 @@ class Email extends Model
         'clicked' => 'int',
     ];
 
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
