@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
+test('Set Model Connection', function () {
+    $email = new Email();
+    \PHPUnit\Framework\assertNull($email->getConnectionName());
+
+    $connectionName = 'log';
+    config()->set('email-tracking.email-db-connection', $connectionName);
+    $email = new Email();
+    \PHPUnit\Framework\assertEquals($connectionName, $email->getConnectionName());
+});
+
 it('can send Custom Mail passing model data', function () {
     copyViewFiles();
     $user = User::factory()->create();

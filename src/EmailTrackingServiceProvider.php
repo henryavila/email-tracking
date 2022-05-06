@@ -16,6 +16,7 @@ class EmailTrackingServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('email-tracking')
+            ->hasConfigFile()
             ->hasTranslations()
             ->hasRoute('webhooks')
             ->hasMigration('create_emails_table');
