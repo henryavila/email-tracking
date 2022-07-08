@@ -2,6 +2,19 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
+## 1.2.0 - 2022-07-08
+
+### What's Changed
+
+- Bump dependabot/fetch-metadata from 1.3.1 to 1.3.3 by @dependabot in https://github.com/apps-inteligentes/email-tracking/pull/4
+- Laravel Nova 4 support by @henryavila in https://github.com/apps-inteligentes/email-tracking/pull/5
+
+### New Contributors
+
+- @dependabot made their first contribution in https://github.com/apps-inteligentes/email-tracking/pull/4
+
+**Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/1.1.0...1.2.0
+
 ## 1.1.0 - 2022-05-06
 
 ## What's Changed
