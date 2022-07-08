@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
-
 test('Set Model Connection', function () {
     $email = new Email();
     \PHPUnit\Framework\assertNull($email->getConnectionName());
