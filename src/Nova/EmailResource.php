@@ -15,7 +15,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
 
-
 /**
  * @method Email model()
  */
@@ -152,13 +151,13 @@ class EmailResource extends Resource
             Text::make(__('email-tracking::resources.subject'), 'subject')->sortable(),
             Text::make(__('email-tracking::resources.mail_to'), 'to')->sortable(),
 
-            Number::make(__('email-tracking::resources.delivered'), fn() => null)
+            Number::make(__('email-tracking::resources.delivered'), fn () => null)
                 ->textAlign('center')
-                ->canSee(fn() => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
+                ->canSee(fn () => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
 
             //delivered_at or failed_at are defined
-            Boolean::make(__('email-tracking::resources.delivered'), fn() => isset($this->model()->delivered_at))
-                ->canSee(fn() => !empty($this->model()->delivered_at) || !empty($this->model()->failed_at)),
+            Boolean::make(__('email-tracking::resources.delivered'), fn () => isset($this->model()->delivered_at))
+                ->canSee(fn () => ! empty($this->model()->delivered_at) || ! empty($this->model()->failed_at)),
 
         ];
     }
