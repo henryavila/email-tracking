@@ -2,6 +2,10 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
+## 1.2.1 - 2022-07-08
+
+**Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2022-07-08
 
 ### What's Changed
