@@ -6,6 +6,7 @@ use AppsInteligentes\EmailTracking\Models\Email;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
@@ -13,7 +14,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
-use Techouse\IntlDateTime\IntlDateTime;
+
 
 /**
  * @method Email model()
@@ -98,15 +99,9 @@ class EmailResource extends Resource
             ID::make(__('email-tracking::resources.model_id'), 'id'),
             Text::make(__('email-tracking::resources.message_id'), 'message_id'),
 
-            IntlDateTime::make(__('email-tracking::resources.created_at'), 'created_at')
-                ->hideUserTimeZone()
-                ->locale(str_replace('_', '-', config('app.locale')))
-                ->withTime(),
+            DateTime::make(__('email-tracking::resources.created_at'), 'created_at'),
 
-            IntlDateTime::make(__('email-tracking::resources.updated_at'), 'updated_at')
-                ->hideUserTimeZone()
-                ->locale(str_replace('_', '-', config('app.locale')))
-                ->withTime(),
+            DateTime::make(__('email-tracking::resources.updated_at'), 'updated_at'),
 
             MorphTo::make('sender')->searchable(),
 
@@ -119,15 +114,9 @@ class EmailResource extends Resource
             ]),
 
             Panel::make(__('email-tracking::resources.statistics'), [
-                IntlDateTime::make(__('email-tracking::resources.delivered_at'), 'delivered_at')
-                    ->hideUserTimeZone()
-                    ->locale(str_replace('_', '-', config('app.locale')))
-                    ->withTime(),
+                DateTime::make(__('email-tracking::resources.delivered_at'), 'delivered_at'),
 
-                IntlDateTime::make(__('email-tracking::resources.failed_at'), 'failed_at')
-                    ->hideUserTimeZone()
-                    ->locale(str_replace('_', '-', config('app.locale')))
-                    ->withTime(),
+                DateTime::make(__('email-tracking::resources.failed_at'), 'failed_at'),
 
                 Text::make(__('email-tracking::resources.status'), function (Email $email) {
                     $array = explode('||', $email->delivery_status_message);
@@ -138,25 +127,13 @@ class EmailResource extends Resource
                 Number::make(__('email-tracking::resources.delivery_status_attempts'), 'delivery_status_attempts'),
                 Number::make(__('email-tracking::resources.opened'), 'opened'),
 
-                IntlDateTime::make(__('email-tracking::resources.first_opened_at'), 'first_opened_at')
-                    ->hideUserTimeZone()
-                    ->withTime()
-                    ->locale(str_replace('_', '-', config('app.locale'))),
-                IntlDateTime::make(__('email-tracking::resources.last_opened_at'), 'last_opened_at')
-                    ->hideUserTimeZone()
-                    ->withTime()
-                    ->locale(str_replace('_', '-', config('app.locale'))),
+                DateTime::make(__('email-tracking::resources.first_opened_at'), 'first_opened_at'),
+                DateTime::make(__('email-tracking::resources.last_opened_at'), 'last_opened_at'),
 
                 Number::make(__('email-tracking::resources.clicked'), 'clicked'),
 
-                IntlDateTime::make(__('email-tracking::resources.first_clicked_at'), 'first_clicked_at')
-                    ->hideUserTimeZone()
-                    ->withTime()
-                    ->locale(str_replace('_', '-', config('app.locale'))),
-                IntlDateTime::make(__('email-tracking::resources.last_clicked_at'), 'last_clicked_at')
-                    ->hideUserTimeZone()
-                    ->withTime()
-                    ->locale(str_replace('_', '-', config('app.locale'))),
+                DateTime::make(__('email-tracking::resources.first_clicked_at'), 'first_clicked_at'),
+                DateTime::make(__('email-tracking::resources.last_clicked_at'), 'last_clicked_at'),
 
             ]),
         ];
@@ -168,23 +145,20 @@ class EmailResource extends Resource
 
             ID::make()->sortable(),
 
-            IntlDateTime::make(__('email-tracking::resources.created_at'), 'created_at')->sortable()
-                ->hideUserTimeZone()
-                ->locale(str_replace('_', '-', config('app.locale')))
-                ->withTime(),
+            DateTime::make(__('email-tracking::resources.created_at'), 'created_at')->sortable(),
 
             MorphTo::make('sender')->searchable(),
 
             Text::make(__('email-tracking::resources.subject'), 'subject')->sortable(),
             Text::make(__('email-tracking::resources.mail_to'), 'to')->sortable(),
 
-            Number::make(__('email-tracking::resources.delivered'), fn () => null)
+            Number::make(__('email-tracking::resources.delivered'), fn() => null)
                 ->textAlign('center')
-                ->canSee(fn () => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
+                ->canSee(fn() => empty($this->model()->delivered_at) && empty($this->model()->failed_at)),
 
             //delivered_at or failed_at are defined
-            Boolean::make(__('email-tracking::resources.delivered'), fn () => isset($this->model()->delivered_at))
-                ->canSee(fn () => ! empty($this->model()->delivered_at) || ! empty($this->model()->failed_at)),
+            Boolean::make(__('email-tracking::resources.delivered'), fn() => isset($this->model()->delivered_at))
+                ->canSee(fn() => !empty($this->model()->delivered_at) || !empty($this->model()->failed_at)),
 
         ];
     }
