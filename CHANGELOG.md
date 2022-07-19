@@ -2,6 +2,14 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
+## 2.0.0 - 2022-07-19
+
+### What's Changed
+
+- Log email body by @henryavila in https://github.com/apps-inteligentes/email-tracking/pull/7
+
+**Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/1.2.2...2.0.0
+
 ## 1.2.2 - 2022-07-15
 
 ### What's Changed
