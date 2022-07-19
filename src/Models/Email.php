@@ -51,11 +51,11 @@ class Email extends Model
     ];
 
     protected $casts = [
-        'message_id'               => 'string',
+        'message_id' => 'string',
         'delivery_status_attempts' => 'int',
-        'sender_id'                => 'int',
-        'opened'                   => 'int',
-        'clicked'                  => 'int',
+        'sender_id' => 'int',
+        'opened' => 'int',
+        'clicked' => 'int',
     ];
 
     public function __construct(array $attributes = [])

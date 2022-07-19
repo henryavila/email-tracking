@@ -113,8 +113,8 @@ class EmailResource extends Resource
                 Text::make(__('email-tracking::resources.mail_bcc'), 'bcc'),
                 Text::make(__('email-tracking::resources.mail_reply_to'), 'reply_to'),
 
-                Trix::make('Conteúdo', 'body_html')->canSee(fn() => config('email-tracking.log-body-html')),
-                Textarea::make('Conteúdo Simplificado', 'body_txt')->canSee(fn() => config('email-tracking.log-body-txt')),
+                Trix::make('Conteúdo', 'body_html')->canSee(fn () => config('email-tracking.log-body-html')),
+                Textarea::make('Conteúdo Simplificado', 'body_txt')->canSee(fn () => config('email-tracking.log-body-txt')),
             ]),
 
             Panel::make(__('email-tracking::resources.statistics'), [
