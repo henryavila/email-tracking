@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int opened
  * @property int clicked
  *
+ * @property string body_html
+ * @property string body_txt
+ *
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon deleted_at
@@ -35,7 +38,12 @@ use Illuminate\Database\Eloquent\Model;
 class Email extends Model
 {
     protected $dates = [
-        'delivered_at', 'failed_at', 'last_opened_at', 'last_clicked_at', 'first_opened_at', 'first_clicked_at',
+        'delivered_at',
+        'failed_at',
+        'last_opened_at',
+        'last_clicked_at',
+        'first_opened_at',
+        'first_clicked_at',
     ];
 
     protected $guarded = [

@@ -11,6 +11,8 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Resource;
@@ -110,6 +112,9 @@ class EmailResource extends Resource
                 Text::make(__('email-tracking::resources.mail_cc'), 'cc'),
                 Text::make(__('email-tracking::resources.mail_bcc'), 'bcc'),
                 Text::make(__('email-tracking::resources.mail_reply_to'), 'reply_to'),
+
+                Trix::make('Conteúdo', 'body_html')->canSee(fn () => config('email-tracking.log-body-html')),
+                Textarea::make('Conteúdo Simplificado', 'body_txt')->canSee(fn () => config('email-tracking.log-body-txt')),
             ]),
 
             Panel::make(__('email-tracking::resources.statistics'), [

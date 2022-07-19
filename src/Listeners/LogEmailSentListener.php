@@ -38,6 +38,13 @@ class LogEmailSentListener
                 ->implode(', '),
         ];
 
+        if (config('email-tracking.log-body-html')) {
+            $data['body_html'] = $event->message->getHtmlBody();
+        }
+
+        if (config('email-tracking.log-body-txt')) {
+            $data['body_txt'] = $event->message->getTextBody();
+        }
 
         $model = $event->data['model'] ?? null;
 
