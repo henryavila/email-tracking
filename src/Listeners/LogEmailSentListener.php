@@ -19,25 +19,32 @@ class LogEmailSentListener
     {
         $data = [
             'message_id' => preg_replace('([<>])', '', $event->sent->getMessageId()),
-            'subject' => $event->message->getSubject(),
+            'subject'    => $event->message->getSubject(),
 
             'to' => collect($event->message->getTo())
-                ->map(fn (Address $address) => $address->getAddress())
+                ->map(fn(Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'cc' => collect($event->message->getCc())
-                ->map(fn (Address $address) => $address->getAddress())
+                ->map(fn(Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'bcc' => collect($event->message->getBcc())
-                ->map(fn (Address $address) => $address->getAddress())
+                ->map(fn(Address $address) => $address->getAddress())
                 ->implode(', '),
 
             'reply_to' => collect($event->message->getReplyTo())
-                ->map(fn (Address $address) => $address->getAddress())
+                ->map(fn(Address $address) => $address->getAddress())
                 ->implode(', '),
         ];
 
+        if (config('email-tracking.log-body-html')) {
+            $data['body_html'] = $event->message->getHtmlBody();
+        }
+
+        if (config('email-tracking.log-body-txt')) {
+            $data['body_txt'] = $event->message->getTextBody();
+        }
 
         $model = $event->data['model'] ?? null;
 
