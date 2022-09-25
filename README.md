@@ -186,13 +186,6 @@ class SampleMail extends \AppsInteligentes\EmailTracking\Mail\TrackableMail
     {
         parent::__construct($model, 'emails.sample');
     }
-
-    public function build(): void
-    {
-        parent::build();
-        
-        // Finish the E-mail buildUp. The view was already defined
-    }
 }
 ```
 

@@ -1,7 +1,7 @@
 {
     "name": "apps-inteligentes/email-tracking",
     "description": "Track e-mail delivery with Mailgun Hooks and display the report on Laravel Nova Dashboard",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "keywords": [
         "apps-inteligentes",
         "laravel",

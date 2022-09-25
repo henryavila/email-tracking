@@ -14,6 +14,7 @@ class TrackableMail extends Mailable implements ShouldQueue
 
     public function __construct(public $model, public string $viewName)
     {
+		$this->build();
     }
 
     public function build(): void
