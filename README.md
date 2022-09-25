@@ -186,8 +186,14 @@ class SampleMail extends \AppsInteligentes\EmailTracking\Mail\TrackableMail
     {
         parent::__construct($model, 'emails.sample');
     }
+    
+    public function build()
+	{
+		// Normal build without call to the view() method
+	}
 }
 ```
+Basically, remove the view declaration from `build()` and move it to constructor.
 
 **Ps:** In this sample, `'emails.sample'` is the name of the view generated for this sample. Overwrite it with it with
 yours.
