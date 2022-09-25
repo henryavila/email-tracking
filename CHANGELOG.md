@@ -3,8 +3,11 @@
 All notable changes to `email-tracking` will be documented in this file.
 
 # 2.1.0 - 2022-09-25
+
 ### What's Changed
+
 - On Mail setup, is not required to call
+
 ```php
  public function build(): void
     {
@@ -12,12 +15,19 @@ All notable changes to `email-tracking` will be documented in this file.
         
         // Finish the E-mail buildUp. The view was already defined
     }
+
 ```
 The docs have been updated to reflect this change.
 
-
 **Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/2.0.0...2.1.0
 
+## 2.1.0 - 2022-09-25
+
+### What's Changed
+
+- Simplify TrackableMail setup @henryavila
+
+**Full Changelog**: https://github.com/apps-inteligentes/email-tracking/compare/2.0.0...2.1.0
 
 ## 2.0.0 - 2022-07-19
 
