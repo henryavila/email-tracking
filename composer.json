@@ -1,7 +1,7 @@
 {
     "name": "apps-inteligentes/email-tracking",
     "description": "Track e-mail delivery with Mailgun Hooks and display the report on Laravel Nova Dashboard",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "keywords": [
         "apps-inteligentes",
         "laravel",
@@ -17,12 +17,12 @@
     "require": {
         "php": "^8.0.2",
         "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^9.0",
-        "spatie/laravel-permission": "^3.0|^5.0"
+        "illuminate/contracts": "^9.0|^10.0",
+        "spatie/laravel-permission": "^3.0|^4.0|^5.0"
     },
     "require-dev": {
         "laravel/nova": "^3.0|^4.0",
-        "nunomaduro/collision": "^6.0",
+        "nunomaduro/collision": "^6.0|^7.0",
         "nunomaduro/larastan": "^2.0.1",
         "orchestra/testbench": "^7.0",
         "pestphp/pest": "^1.21",
@@ -30,7 +30,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.5|^10.0",
         "spatie/laravel-ray": "^1.26"
     },
     "repositories": [

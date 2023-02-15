@@ -2,6 +2,9 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
+# 2.2.0 - 2023-15-02
+- Laravel 10 Support  
+
 # 2.1.0 - 2022-09-25
 
 ### What's Changed
