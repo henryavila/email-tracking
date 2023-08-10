@@ -1,8 +1,8 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Traits;
+namespace HenryAvila\EmailTracking\Traits;
 
-use AppsInteligentes\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Models\Email;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 

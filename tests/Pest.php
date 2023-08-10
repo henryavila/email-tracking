@@ -1,6 +1,6 @@
 <?php
 
-use AppsInteligentes\EmailTracking\Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(TestCase::class)->in(__DIR__);
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class)->in(__DIR__);
+uses(Tests\TestCase::class)->in(__DIR__);
+uses(RefreshDatabase::class)->in(__DIR__);

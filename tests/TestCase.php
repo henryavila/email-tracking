@@ -1,8 +1,8 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Tests;
+namespace Tests;
 
-use AppsInteligentes\EmailTracking\EmailTrackingServiceProvider;
+use HenryAvila\EmailTracking\EmailTrackingServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'AppsInteligentes\\EmailTracking\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'HenryAvila\\EmailTracking\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 

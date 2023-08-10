@@ -1,11 +1,11 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Nova;
+namespace HenryAvila\EmailTracking\Nova;
 
-use AppsInteligentes\EmailTracking\Models\Email;
-use AppsInteligentes\EmailTracking\Policies\EmailPolicy;
-use Gate;
+use HenryAvila\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Policies\EmailPolicy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EmailTrackingTool extends \Laravel\Nova\Tool
 {

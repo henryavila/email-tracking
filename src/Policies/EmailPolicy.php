@@ -1,6 +1,6 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Policies;
+namespace HenryAvila\EmailTracking\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 

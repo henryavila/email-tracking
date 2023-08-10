@@ -1,6 +1,6 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Middleware\Webhooks;
+namespace HenryAvila\EmailTracking\Middleware\Webhooks;
 
 use Closure;
 use Illuminate\Http\Request;

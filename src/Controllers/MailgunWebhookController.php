@@ -1,9 +1,9 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Controllers;
+namespace HenryAvila\EmailTracking\Controllers;
 
-use AppsInteligentes\EmailTracking\Middleware\Webhooks\MailgunWebhookMiddleware;
-use AppsInteligentes\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Middleware\Webhooks\MailgunWebhookMiddleware;
+use HenryAvila\EmailTracking\Models\Email;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;

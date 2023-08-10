@@ -1,6 +1,6 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Notifications;
+namespace HenryAvila\EmailTracking\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;
 

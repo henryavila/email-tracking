@@ -2,6 +2,23 @@ Rastreamento de e-mail Integrado ao Laravel Nova
 
 
 
+## Version 3.0 Upgrade
+This package has been migrated from `apps-inteligentes/email-tracking` to `henryavila/email-tracking`
+The namespace has been moved from `AppsInteligentes\EmailTracking` to `HenryAvila\EmailTracking`
+
+To update this package, update your `composer.json` file to
+
+```json
+{
+    "require": {
+        "henryavila/email-tracking": "^3.0.0"
+    }
+}
+```
+
+Run a global search a replace on your code looking for `AppsInteligentes\EmailTracking` and replacing with `HenryAvila\EmailTracking`
+
+
 ## Version 2.0 Upgrade
 
 The version 2 Logs the content of e-mail body. Logs the HTML and TXT content.
@@ -19,7 +36,7 @@ To update this package, update your `composer.json` file to
 
 and execute
 ```shell
-composer update apps-inteligentes/email-tracking
+composer update henryavila/email-tracking
 ```
 
 Then, publish and run the migrations with:
@@ -52,7 +69,7 @@ MAILGUN_SECRET=key-99999999999999999999999999999999
 Install the package via composer:
 
 ```bash
-composer require apps-inteligentes/email-tracking
+composer require henryavila/email-tracking
 ```
 
 Publish and run the migrations with:
@@ -112,14 +129,14 @@ On `NovaServiceProvider.php`, add the code:
      */
     public function tools()
     {
-        \AppsInteligentes\EmailTracking\Nova\EmailTrackingTool::make()
+        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
     }
 ```
 
 This will display the e-mails on Laravel Nova Dashboard.
 
 If you need to customize the Nova Resource, just create a new one
-extendind `AppsInteligentes\EmailTracking\Nova\EmailResource` and use this code
+extendind `HenryAvila\EmailTracking\Nova\EmailResource` and use this code
 
 ```php
     /**
@@ -129,7 +146,7 @@ extendind `AppsInteligentes\EmailTracking\Nova\EmailResource` and use this code
      */
     public function tools()
     {                    
-        \AppsInteligentes\EmailTracking\Nova\EmailTrackingTool::make()
+        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
             ->emailResource(CustomEmailResource::class)                        
     }                
 ```
@@ -149,7 +166,7 @@ On `EventServiceProvider.php`, add the code
      */
    protected $listen = [
         \Illuminate\Mail\Events\MessageSent::class => [
-            \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener::class,
+            \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
         ],
    ];
 ```
@@ -163,7 +180,7 @@ define the sender (like Nova Reset password e-mail)
 
 ### Mailable
 
-When creating a new Mailable, overwrite the Base Mailable Class with `AppsInteligentes\EmailTracking\Mail\TrackableMail`
+When creating a new Mailable, overwrite the Base Mailable Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
 
 This default code:
 
@@ -180,7 +197,7 @@ class SampleMail extends \Illuminate\Mail\Mailable
 must be overwritten by this one:
 
 ```php
-class SampleMail extends \AppsInteligentes\EmailTracking\Mail\TrackableMail
+class SampleMail extends \HenryAvila\EmailTracking\Mail\TrackableMail
 {
     public function __construct(public \Illuminate\Database\Eloquent\Model $model)
     {
@@ -235,7 +252,7 @@ public function __construct(public \Illuminate\Database\Eloquent\Model $model)
 
 public function toMail($notifiable): MailMessage
 {
-    return (new \AppsInteligentes\EmailTracking\Notifications\TrackableNotificationMailMessage($this->model))
+    return (new \HenryAvila\EmailTracking\Notifications\TrackableNotificationMailMessage($this->model))
         ->line('The introduction to the notification.')
         ->action('Notification Action', url('/'))
         ->line('Thank you for using our application!');
@@ -261,7 +278,7 @@ public function fields(Request $request)
 {
     return [
         ...
-        \AppsInteligentes\EmailTracking\EmailTracking::hasManyEmailsField(),
+        \HenryAvila\EmailTracking\EmailTracking::hasManyEmailsField(),
         ...
     ];
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Listeners;
+namespace HenryAvila\EmailTracking\Listeners;
 
-use AppsInteligentes\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Models\Email;
 use Illuminate\Mail\Events\MessageSent;
 use Symfony\Component\Mime\Address;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Facades;
+namespace HenryAvila\EmailTracking\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \AppsInteligentes\EmailTracking\EmailTracking
+ * @see \HenryAvila\EmailTracking\EmailTracking
  */
 class EmailTracking extends Facade
 {

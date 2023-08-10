@@ -1,6 +1,6 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking;
+namespace HenryAvila\EmailTracking;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

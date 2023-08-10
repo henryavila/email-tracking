@@ -1,8 +1,8 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking;
+namespace HenryAvila\EmailTracking;
 
-use AppsInteligentes\EmailTracking\Nova\EmailTrackingTool;
+use HenryAvila\EmailTracking\Nova\EmailTrackingTool;
 use Laravel\Nova\Fields\MorphMany;
 
 class EmailTracking

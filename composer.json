@@ -1,13 +1,13 @@
 {
-    "name": "apps-inteligentes/email-tracking",
+    "name": "henryavila/email-tracking",
     "description": "Track e-mail delivery with Mailgun Hooks and display the report on Laravel Nova Dashboard",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "keywords": [
-        "apps-inteligentes",
+        "henryavila",
         "laravel",
         "email-tracking"
     ],
-    "homepage": "https://github.com/apps-inteligentes/email-tracking",
+    "homepage": "https://github.com/henryavila/email-tracking",
     "license": "MIT",
     "authors": [
         {
@@ -24,9 +24,9 @@
         "laravel/nova": "^3.0|^4.0",
         "nunomaduro/collision": "^6.0|^7.0",
         "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^7.0",
-        "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.1",
+        "orchestra/testbench": "^7.0|^8.0",
+        "pestphp/pest": "^v2.13.0",
+        "pestphp/pest-plugin-laravel": "^v2.1.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
@@ -41,13 +41,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "AppsInteligentes\\EmailTracking\\": "src",
-            "AppsInteligentes\\EmailTracking\\Database\\Factories\\": "database/factories"
+            "HenryAvila\\EmailTracking\\": "src",
+            "HenryAvila\\EmailTracking\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AppsInteligentes\\EmailTracking\\Tests\\": "tests"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -65,10 +65,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AppsInteligentes\\EmailTracking\\EmailTrackingServiceProvider"
+                "HenryAvila\\EmailTracking\\EmailTrackingServiceProvider"
             ],
             "aliases": {
-                "EmailTracking": "AppsInteligentes\\EmailTracking\\Facades\\EmailTracking"
+                "EmailTracking": "HenryAvila\\EmailTracking\\Facades\\EmailTracking"
             }
         }
     },

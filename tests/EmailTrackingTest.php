@@ -1,22 +1,31 @@
 <?php
 
-use AppsInteligentes\EmailTracking\Mail\TrackableMail;
-use AppsInteligentes\EmailTracking\Models\Email;
-use AppsInteligentes\EmailTracking\Models\User;
+use HenryAvila\EmailTracking\Listeners\LogEmailSentListener;
+use HenryAvila\EmailTracking\Mail\TrackableMail;
+use HenryAvila\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Models\User;
+use HenryAvila\EmailTracking\Notifications\SampleNotification;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseHas;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEmpty;
+use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNull;
+use function PHPUnit\Framework\assertTrue;
 
 test('Set Model Connection', function () {
     $email = new Email();
-    \PHPUnit\Framework\assertNull($email->getConnectionName());
+    assertNull($email->getConnectionName());
 
     $connectionName = 'log';
     config()->set('email-tracking.email-db-connection', $connectionName);
     $email = new Email();
-    \PHPUnit\Framework\assertEquals($connectionName, $email->getConnectionName());
+    assertEquals($connectionName, $email->getConnectionName());
 });
 
 it('can send Custom Mail passing model data', function () {
@@ -35,14 +44,14 @@ it('can send Custom Mail passing model data', function () {
     $mailable->assertSeeInOrderInHtml(['HTML', $user->name]);
 
     Event::assertDispatched(MessageSending::class, function (MessageSending $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
         return true;
     });
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
         return true;
     });
@@ -62,27 +71,28 @@ it('create a email object on custom Mailable send', function () {
         MessageSent::class,
     ]);
 
-    \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 0);
+    assertDatabaseCount((new Email())->getTable(), 0);
 
     $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
     Mail::send($mailable);
 
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
-        $listener = new \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener();
+
+        $listener = new LogEmailSentListener();
         $listener->handle($event);
 
-        \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
-        \Pest\Laravel\assertDatabaseHas((new Email())->getTable(), [
+        assertDatabaseCount((new Email())->getTable(), 1);
+        assertDatabaseHas((new Email())->getTable(), [
             'id' => 1,
         ]);
         $mailLog = Email::find(1);
 
-        \PHPUnit\Framework\assertEquals($mailLog->to, $user->email);
-        \PHPUnit\Framework\assertEquals(User::class, $mailLog->sender_type);
-        \PHPUnit\Framework\assertEquals($user->id, $mailLog->sender_id);
+        assertEquals($mailLog->to, $user->email);
+        assertEquals(User::class, $mailLog->sender_type);
+        assertEquals($user->id, $mailLog->sender_id);
 
         return true;
     });
@@ -99,18 +109,18 @@ it('can send Custom Notification passing model data', function () {
     ]);
 
     Notification::route('mail', $user->email)
-        ->notify(new \AppsInteligentes\EmailTracking\Notifications\SampleNotification($user));
+        ->notify(new SampleNotification($user));
 
 
     Event::assertDispatched(MessageSending::class, function (MessageSending $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
         return true;
     });
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
         return true;
     });
@@ -125,27 +135,27 @@ it('create a email object on custom Notification send', function () {
         MessageSent::class,
     ]);
 
-    \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 0);
+    assertDatabaseCount((new Email())->getTable(), 0);
 
     Notification::route('mail', $user->email)
-        ->notify(new \AppsInteligentes\EmailTracking\Notifications\SampleNotification($user));
+        ->notify(new SampleNotification($user));
 
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        \PHPUnit\Framework\assertNotEmpty($event->data['model']);
-        \PHPUnit\Framework\assertEquals($event->data['model']?->id, $user->id);
+        assertNotEmpty($event->data['model']);
+        assertEquals($event->data['model']?->id, $user->id);
 
-        $listener = new \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener();
+        $listener = new LogEmailSentListener();
         $listener->handle($event);
 
-        \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
-        \Pest\Laravel\assertDatabaseHas((new Email())->getTable(), [
+        assertDatabaseCount((new Email())->getTable(), 1);
+        assertDatabaseHas((new Email())->getTable(), [
             'id' => 1,
         ]);
         $mailLog = Email::find(1);
 
-        \PHPUnit\Framework\assertEquals($mailLog->to, $user->email);
-        \PHPUnit\Framework\assertEquals(User::class, $mailLog->sender_type);
-        \PHPUnit\Framework\assertEquals($user->id, $mailLog->sender_id);
+        assertEquals($mailLog->to, $user->email);
+        assertEquals(User::class, $mailLog->sender_type);
+        assertEquals($user->id, $mailLog->sender_id);
 
         return true;
     });
@@ -161,7 +171,7 @@ it('can handle mailgun webhook on DELIVERED status', function () {
 
     // Handle MessageSent event
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        $listener = new \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener();
+        $listener = new LogEmailSentListener();
         $listener->handle($event);
 
         return true;
@@ -174,20 +184,20 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     $mailGunRequestData = getMailGunRequestData($emailLog, 'delivered');
 
     $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
-    \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
+    assertDatabaseCount((new Email())->getTable(), 1);
 
     $emailLog = Email::first();
 
-    \PHPUnit\Framework\assertNotNull($emailLog->delivered_at);
-    \PHPUnit\Framework\assertNull($emailLog->failed_at);
-    \PHPUnit\Framework\assertEquals(0, $emailLog->opened);
-    \PHPUnit\Framework\assertEquals(0, $emailLog->clicked);
-    \PHPUnit\Framework\assertEquals(1, $emailLog->delivery_status_attempts);
-    \PHPUnit\Framework\assertTrue(str_contains($emailLog->delivery_status_message, 'OK'));
-    \PHPUnit\Framework\assertNull($emailLog->first_opened_at);
-    \PHPUnit\Framework\assertNull($emailLog->first_clicked_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_opened_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_clicked_at);
+    assertNotNull($emailLog->delivered_at);
+    assertNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertEquals(1, $emailLog->delivery_status_attempts);
+    assertTrue(str_contains($emailLog->delivery_status_message, 'OK'));
+    assertNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
 });
 
 
@@ -200,7 +210,7 @@ it('can handle mailgun webhook on OPENED status', function () {
 
     // Handle MessageSent event
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        $listener = new \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener();
+        $listener = new LogEmailSentListener();
         $listener->handle($event);
 
         return true;
@@ -213,20 +223,20 @@ it('can handle mailgun webhook on OPENED status', function () {
     $mailGunRequestData = getMailGunRequestData($emailLog, 'opened');
 
     $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
-    \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
+    assertDatabaseCount((new Email())->getTable(), 1);
 
     $emailLog = Email::first();
 
-    \PHPUnit\Framework\assertNull($emailLog->delivered_at);
-    \PHPUnit\Framework\assertNull($emailLog->failed_at);
-    \PHPUnit\Framework\assertEquals(1, $emailLog->opened);
-    \PHPUnit\Framework\assertEquals(0, $emailLog->clicked);
-    \PHPUnit\Framework\assertNull($emailLog->delivery_status_attempts);
-    \PHPUnit\Framework\assertNull($emailLog->delivery_status_message);
-    \PHPUnit\Framework\assertNotNull($emailLog->first_opened_at);
-    \PHPUnit\Framework\assertNull($emailLog->first_clicked_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_opened_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_clicked_at);
+    assertNull($emailLog->delivered_at);
+    assertNull($emailLog->failed_at);
+    assertEquals(1, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertNull($emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
+    assertNotNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
 });
 
 
@@ -239,7 +249,7 @@ it('can handle mailgun webhook on CLICKED status', function () {
 
     // Handle MessageSent event
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
-        $listener = new \AppsInteligentes\EmailTracking\Listeners\LogEmailSentListener();
+        $listener = new LogEmailSentListener();
         $listener->handle($event);
 
         return true;
@@ -252,20 +262,20 @@ it('can handle mailgun webhook on CLICKED status', function () {
     $mailGunRequestData = getMailGunRequestData($emailLog, 'clicked');
 
     $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
-    \Pest\Laravel\assertDatabaseCount((new Email())->getTable(), 1);
+    assertDatabaseCount((new Email())->getTable(), 1);
 
     $emailLog = Email::first();
 
-    \PHPUnit\Framework\assertNull($emailLog->delivered_at);
-    \PHPUnit\Framework\assertNull($emailLog->failed_at);
-    \PHPUnit\Framework\assertEquals(0, $emailLog->opened);
-    \PHPUnit\Framework\assertEquals(1, $emailLog->clicked);
-    \PHPUnit\Framework\assertNull($emailLog->delivery_status_attempts);
-    \PHPUnit\Framework\assertNull($emailLog->delivery_status_message);
-    \PHPUnit\Framework\assertNull($emailLog->first_opened_at);
-    \PHPUnit\Framework\assertNotNull($emailLog->first_clicked_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_opened_at);
-    \PHPUnit\Framework\assertNull($emailLog->last_clicked_at);
+    assertNull($emailLog->delivered_at);
+    assertNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(1, $emailLog->clicked);
+    assertNull($emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
+    assertNull($emailLog->first_opened_at);
+    assertNotNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
 });
 
 /**

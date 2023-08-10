@@ -1,6 +1,6 @@
 <?php
 
-namespace AppsInteligentes\EmailTracking\Mail;
+namespace HenryAvila\EmailTracking\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
