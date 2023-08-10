@@ -48,12 +48,12 @@ class Email extends Model
         'sender_id' => 'int',
         'opened' => 'int',
         'clicked' => 'int',
-	    'delivered_at' => 'datetime',
-	    'failed_at' => 'datetime',
-	    'last_opened_at' => 'datetime',
-	    'last_clicked_at' => 'datetime',
-	    'first_opened_at' => 'datetime',
-	    'first_clicked_at' => 'datetime',
+        'delivered_at' => 'datetime',
+        'failed_at' => 'datetime',
+        'last_opened_at' => 'datetime',
+        'last_clicked_at' => 'datetime',
+        'first_opened_at' => 'datetime',
+        'first_clicked_at' => 'datetime',
     ];
 
     public function __construct(array $attributes = [])
