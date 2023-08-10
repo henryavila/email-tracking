@@ -2,14 +2,14 @@
 
 All notable changes to `email-tracking` will be documented in this file.
 
-
 # 3.0.0 - 2023-08-10
+
 - Migrate from `apps-inteligentes/email-tracking` to `henryavila/email-tracking`
 - Migrated to pest v2
 
-
 # 2.2.0 - 2023-15-02
-- Laravel 10 Support  
+
+- Laravel 10 Support
 
 # 2.1.0 - 2022-09-25
 
@@ -25,10 +25,20 @@ All notable changes to `email-tracking` will be documented in this file.
         // Finish the E-mail buildUp. The view was already defined
     }
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v3.0.0 - 2023-08-10
+
+### What's Changed
+
+- Migrate from `apps-inteligentes/email-tracking` to `henryavila/email-tracking`
+- pest 2.0
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v2.2.0...v3.0.0
 
 ## 2.1.0 - 2022-09-25
 
