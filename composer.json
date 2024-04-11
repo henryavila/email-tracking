@@ -1,7 +1,6 @@
 {
     "name": "henryavila/email-tracking",
     "description": "Track e-mail delivery with Mailgun Hooks and display the report on Laravel Nova Dashboard",
-    "version": "3.0.0",
     "keywords": [
         "henryavila",
         "laravel",
