@@ -26,10 +26,21 @@ All notable changes to `email-tracking` will be documented in this file.
     }
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v4.0.0 - 2024-04-11
+
+### Requeries php >= 8.1.0
+
+#### What's Changed
+
+* Support Laravel 11 by @henryavila in https://github.com/henryavila/email-tracking/pull/17
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v3.0.0...v4.0.0
 
 ## v3.0.0 - 2023-08-10
 
