@@ -27,10 +27,15 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v4.0.1 - 2024-04-11
+
+Fix release
 
 ## v4.0.0 - 2024-04-11
 
