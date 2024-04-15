@@ -27,7 +27,7 @@ jobs:
           composer config http-basic.nova.laravel.com ${LARAVEL_NOVA_USERNAME} ${LARAVEL_NOVA_TOKEN}
 
       - name: Install composer dependencies
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
 
       - name: Run PHPStan
         run: ./vendor/bin/phpstan --error-format=github
