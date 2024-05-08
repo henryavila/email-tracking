@@ -2,50 +2,10 @@ Rastreamento de e-mail Integrado ao Laravel Nova
 
 
 
-## Version 3.0 Upgrade
-This package has been migrated from `apps-inteligentes/email-tracking` to `henryavila/email-tracking`
-The namespace has been moved from `AppsInteligentes\EmailTracking` to `HenryAvila\EmailTracking`
-
-To update this package, update your `composer.json` file to
-
-```json
-{
-    "require": {
-        "henryavila/email-tracking": "^3.0.0"
-    }
-}
-```
-
-Run a global search a replace on your code looking for `AppsInteligentes\EmailTracking` and replacing with `HenryAvila\EmailTracking`
-
-
-## Version 2.0 Upgrade
-
-The version 2 Logs the content of e-mail body. Logs the HTML and TXT content.
-You can disable this in the config file.
-
-To update this package, update your `composer.json` file to
-
-```json
-{
-    "require": {
-        "apps-inteligentes/email-tracking": "^2.0.0"
-    }
-}
-```
-
-and execute
-```shell
-composer update henryavila/email-tracking
-```
-
-Then, publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="email-tracking-migrations"
-php artisan migrate
-```
-
+## Abandon Laravel Nova
+Since I've abandoned Laravel Nova in favor of Filament, This package will no longer add support to Laravel Nova.
+The exact content of this package with Laravel Nova has been moved to a new package https://packagist.org/packages/henryavila/laravel-nova-email-tracking
+If you are using Laravel Nova, please use this new package.
 
 ---
 
