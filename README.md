@@ -1,4 +1,4 @@
-Rastreamento de e-mail Integrado ao Laravel Nova
+Rastreamento de e-mail com Laravel
 
 
 

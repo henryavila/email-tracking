@@ -38,9 +38,6 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Prepare Composer
-        env:
-          LARAVEL_NOVA_TOKEN: ${{ secrets.LARAVEL_NOVA_TOKEN }}
-          LARAVEL_NOVA_USERNAME: ${{ secrets.LARAVEL_NOVA_USERNAME }}
         run: |
           composer config http-basic.nova.laravel.com ${LARAVEL_NOVA_USERNAME} ${LARAVEL_NOVA_TOKEN}
 
