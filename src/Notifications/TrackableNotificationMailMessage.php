@@ -15,10 +15,10 @@ class TrackableNotificationMailMessage extends MailMessage
 
     public function toArray(): array
     {
-		$array = parent::toArray();
-		if ($this->model !== null) {
-			$array['model'] = $this->model;
-		}
+        $array = parent::toArray();
+        if ($this->model !== null) {
+            $array['model'] = $this->model;
+        }
 
         return $array;
     }
