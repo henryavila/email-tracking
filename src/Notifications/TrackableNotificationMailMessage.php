@@ -9,14 +9,16 @@ use Illuminate\Notifications\Messages\MailMessage;
  */
 class TrackableNotificationMailMessage extends MailMessage
 {
-    public function __construct(public $model)
+    public function __construct(public $model = null)
     {
     }
 
-    public function toArray()
+    public function toArray(): array
     {
-        $array = parent::toArray();
-        $array['model'] = $this->model;
+		$array = parent::toArray();
+		if ($this->model !== null) {
+			$array['model'] = $this->model;
+		}
 
         return $array;
     }

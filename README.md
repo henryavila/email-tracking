@@ -12,7 +12,7 @@ If you are using Laravel Nova, please use this new package.
 
 ## Mailgun configuration
 
-On mailgun interface, add a `webhook` to the url `APP_URL/webhooks/mailgun`
+On mailgun interface, add a `webhook` to the url `<APP_URL>/webhooks/mailgun`
 
 ## Installation
 
@@ -66,7 +66,7 @@ return [
     'log-body-txt' => true,
 ];
 
-``
+```
 
 
 Publish the lang files (optional) with:
@@ -79,51 +79,11 @@ php artisan vendor:publish --tag="email-tracking-translations"
 
 ## Configuration
 
-On `NovaServiceProvider.php`, add the code:
+On all models that can send e-mail, add the trait `ModelWithEmailsSenderTrait`
 
+
+For Laravel 10, add this conde in `EventServiceProvider.php` file
 ```php
-    /**
-     * Get the tools that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    public function tools()
-    {
-        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
-    }
-```
-
-This will display the e-mails on Laravel Nova Dashboard.
-
-If you need to customize the Nova Resource, just create a new one
-extendind `HenryAvila\EmailTracking\Nova\EmailResource` and use this code
-
-```php
-    /**
-     * Get the tools that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    public function tools()
-    {                    
-        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
-            ->emailResource(CustomEmailResource::class)                        
-    }                
-```
-
----
-
-
-On all models that can send e-mail, and add the trait `ModelWithEmailsSenderTrait`
-
-On `EventServiceProvider.php`, add the code
-
-```php
-   /**
-     * The event listener mappings for the application.
-     *
-     * @var array
-     */
    protected $listen = [
         \Illuminate\Mail\Events\MessageSent::class => [
             \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
@@ -131,9 +91,21 @@ On `EventServiceProvider.php`, add the code
    ];
 ```
 
+For Laravel 11, Add this code inside the `boot()` method of `AppServiceProvider.php`
+
+```php
+public function boot(): void
+{
+    \Illuminate\Support\Facades\Event::listen(
+        \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
+    );
+}
+```
+
+
 At this point, all e-mail sent from app, will be logged on the app, but the sender will not be saved
 
-## Save the Email sender
+### Save the Email sender
 
 To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`. the default mail can't
 define the sender (like Nova Reset password e-mail)
@@ -225,23 +197,6 @@ To send the notification
 // User with id 1 send the sample notification to multiple $clientes
 $user = User::find(1);
 Notification::send($clientes, new SampleNotification($user));
-```
-
----
-
-## Displaying the e-mails from sender
-
-To be able to display the e-mails sent from a send, add this code in the `fields()` method on nova resource
-
-```php
-public function fields(Request $request)
-{
-    return [
-        ...
-        \HenryAvila\EmailTracking\EmailTracking::hasManyEmailsField(),
-        ...
-    ];
-}
 ```
 
 ---
