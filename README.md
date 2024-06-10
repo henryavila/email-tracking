@@ -113,44 +113,40 @@ To be able to track the e-mail sender, you must create a custom `Mailable` or `N
 
 #### Mailable
 
-When creating a new Mailable, overwrite the Base Mailable Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
+When creating a new Mailable, it must extend the Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
 
-This default code:
+Also, You must change the constructor and content function.
 
+This is the default mail class:
 ```php
 class SampleMail extends \Illuminate\Mail\Mailable
 {
-	public function build()
-	{
-		return $this->view('emails.sample');
-	}
+    public function __construct()
+    {
+        //
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'view.name',
+        );
+    }	
 }
 ```
 
-must be overwritten by this one:
+Change the class to this:
 
 ```php
 class SampleMail extends \HenryAvila\EmailTracking\Mail\TrackableMail
 {
-    public function __construct(public \Illuminate\Database\Eloquent\Model $model)
+    public function __construct($modelSender)
     {
-        parent::__construct($model, 'emails.sample');
+        $viewData = [];
+        parent::__construct($modelSender, 'view.name', $viewData]);
     }
-    
-    public function build()
-	{
-		// Normal build without call to the view() method
-	}
 }
 ```
-Basically, remove the view declaration from `build()` and move it to constructor.
-
-**Ps:** In this sample, `'emails.sample'` is the name of the view generated for this sample. Overwrite it with it with
-yours.
-
-This new code will pass in the constructor the model that is the email sender.
-At this point, in `build()` method, you can continue to setup the mailable, but know that the view is already defined.
-If you call the view method again, the sender configuration will be overwritten.
 
 To send the Mailable, just pass the model in the mailable constructor
 
