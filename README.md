@@ -96,8 +96,10 @@ For Laravel 11, Add this code inside the `boot()` method of `AppServiceProvider.
 ```php
 public function boot(): void
 {
+    // ...
     \Illuminate\Support\Facades\Event::listen(
-        \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
+        events: \Illuminate\Mail\Events\MessageSent::class,
+        listener: \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class
     );
 }
 ```
@@ -107,10 +109,9 @@ At this point, all e-mail sent from app, will be logged on the app, but the send
 
 ### Save the Email sender
 
-To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`. the default mail can't
-define the sender (like Nova Reset password e-mail)
+To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`.
 
-### Mailable
+#### Mailable
 
 When creating a new Mailable, overwrite the Base Mailable Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
 
@@ -159,7 +160,7 @@ $user = User::find(1);
 Mail::to($user)->send(new App\Mail\SampleMail($user));
 ```
 
-### Notification
+#### Notification
 
 When creating a notification, all you have to do is to change the `toMail()` method.
 Replace the default code:
@@ -177,7 +178,7 @@ public function toMail($notifiable): MailMessage
 with this code:
 
 ```php
-public function __construct(public \Illuminate\Database\Eloquent\Model $model)
+public function __construct(protected \Illuminate\Database\Eloquent\Model $model)
 {
     //
 }

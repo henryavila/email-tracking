@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * Trait ModelWithEmailsSenderTrait
- * @package App\Traits
- *
- * @property Collection|Email[] emails
+ * @property Collection<Email> emails
  */
 trait ModelWithEmailsSenderTrait
 {
