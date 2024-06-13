@@ -1,58 +1,18 @@
-Rastreamento de e-mail Integrado ao Laravel Nova
+Rastreamento de e-mail com Laravel
 
 
 
-## Version 3.0 Upgrade
-This package has been migrated from `apps-inteligentes/email-tracking` to `henryavila/email-tracking`
-The namespace has been moved from `AppsInteligentes\EmailTracking` to `HenryAvila\EmailTracking`
-
-To update this package, update your `composer.json` file to
-
-```json
-{
-    "require": {
-        "henryavila/email-tracking": "^3.0.0"
-    }
-}
-```
-
-Run a global search a replace on your code looking for `AppsInteligentes\EmailTracking` and replacing with `HenryAvila\EmailTracking`
-
-
-## Version 2.0 Upgrade
-
-The version 2 Logs the content of e-mail body. Logs the HTML and TXT content.
-You can disable this in the config file.
-
-To update this package, update your `composer.json` file to
-
-```json
-{
-    "require": {
-        "apps-inteligentes/email-tracking": "^2.0.0"
-    }
-}
-```
-
-and execute
-```shell
-composer update henryavila/email-tracking
-```
-
-Then, publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="email-tracking-migrations"
-php artisan migrate
-```
-
+## Abandon Laravel Nova
+Since I've abandoned Laravel Nova in favor of Filament, This package will no longer add support to Laravel Nova.
+The exact content of this package with Laravel Nova has been moved to a new package https://packagist.org/packages/henryavila/laravel-nova-email-tracking
+If you are using Laravel Nova, please use this new package.
 
 ---
 
 
 ## Mailgun configuration
 
-On mailgun interface, add a `webhook` to the url `APP_URL/webhooks/mailgun`
+On mailgun interface, add a `webhook` to the url `<APP_URL>/webhooks/mailgun`
 
 ## Installation
 
@@ -106,7 +66,7 @@ return [
     'log-body-txt' => true,
 ];
 
-``
+```
 
 
 Publish the lang files (optional) with:
@@ -119,51 +79,11 @@ php artisan vendor:publish --tag="email-tracking-translations"
 
 ## Configuration
 
-On `NovaServiceProvider.php`, add the code:
+On all models that can send e-mail, add the trait `ModelWithEmailsSenderTrait`
 
+
+For Laravel 10, add this conde in `EventServiceProvider.php` file
 ```php
-    /**
-     * Get the tools that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    public function tools()
-    {
-        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
-    }
-```
-
-This will display the e-mails on Laravel Nova Dashboard.
-
-If you need to customize the Nova Resource, just create a new one
-extendind `HenryAvila\EmailTracking\Nova\EmailResource` and use this code
-
-```php
-    /**
-     * Get the tools that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    public function tools()
-    {                    
-        \HenryAvila\EmailTracking\Nova\EmailTrackingTool::make()
-            ->emailResource(CustomEmailResource::class)                        
-    }                
-```
-
----
-
-
-On all models that can send e-mail, and add the trait `ModelWithEmailsSenderTrait`
-
-On `EventServiceProvider.php`, add the code
-
-```php
-   /**
-     * The event listener mappings for the application.
-     *
-     * @var array
-     */
    protected $listen = [
         \Illuminate\Mail\Events\MessageSent::class => [
             \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
@@ -171,53 +91,62 @@ On `EventServiceProvider.php`, add the code
    ];
 ```
 
-At this point, all e-mail sent from app, will be logged on the app, but the sender will not be saved
-
-## Save the Email sender
-
-To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`. the default mail can't
-define the sender (like Nova Reset password e-mail)
-
-### Mailable
-
-When creating a new Mailable, overwrite the Base Mailable Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
-
-This default code:
+For Laravel 11, Add this code inside the `boot()` method of `AppServiceProvider.php`
 
 ```php
-class SampleMail extends \Illuminate\Mail\Mailable
+public function boot(): void
 {
-	public function build()
-	{
-		return $this->view('emails.sample');
-	}
+    // ...
+    \Illuminate\Support\Facades\Event::listen(
+        events: \Illuminate\Mail\Events\MessageSent::class,
+        listener: \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class
+    );
 }
 ```
 
-must be overwritten by this one:
+
+At this point, all e-mail sent from app, will be logged on the app, but the sender will not be saved
+
+### Save the Email sender
+
+To be able to track the e-mail sender, you must create a custom `Mailable` or `Notification`.
+
+#### Mailable
+
+When creating a new Mailable, it must extend the Class with `HenryAvila\EmailTracking\Mail\TrackableMail`
+
+Also, You must change the constructor and content function.
+
+This is the default mail class:
+```php
+class SampleMail extends \Illuminate\Mail\Mailable
+{
+    public function __construct()
+    {
+        //
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'view.name',
+        );
+    }	
+}
+```
+
+Change the class to this:
 
 ```php
 class SampleMail extends \HenryAvila\EmailTracking\Mail\TrackableMail
 {
-    public function __construct(public \Illuminate\Database\Eloquent\Model $model)
+    public function __construct($modelSender)
     {
-        parent::__construct($model, 'emails.sample');
+        $viewData = [];
+        parent::__construct($modelSender, 'view.name', $viewData]);
     }
-    
-    public function build()
-	{
-		// Normal build without call to the view() method
-	}
 }
 ```
-Basically, remove the view declaration from `build()` and move it to constructor.
-
-**Ps:** In this sample, `'emails.sample'` is the name of the view generated for this sample. Overwrite it with it with
-yours.
-
-This new code will pass in the constructor the model that is the email sender.
-At this point, in `build()` method, you can continue to setup the mailable, but know that the view is already defined.
-If you call the view method again, the sender configuration will be overwritten.
 
 To send the Mailable, just pass the model in the mailable constructor
 
@@ -227,7 +156,7 @@ $user = User::find(1);
 Mail::to($user)->send(new App\Mail\SampleMail($user));
 ```
 
-### Notification
+#### Notification
 
 When creating a notification, all you have to do is to change the `toMail()` method.
 Replace the default code:
@@ -245,7 +174,7 @@ public function toMail($notifiable): MailMessage
 with this code:
 
 ```php
-public function __construct(public \Illuminate\Database\Eloquent\Model $model)
+public function __construct(protected \Illuminate\Database\Eloquent\Model $model)
 {
     //
 }
@@ -265,23 +194,6 @@ To send the notification
 // User with id 1 send the sample notification to multiple $clientes
 $user = User::find(1);
 Notification::send($clientes, new SampleNotification($user));
-```
-
----
-
-## Displaying the e-mails from sender
-
-To be able to display the e-mails sent from a send, add this code in the `fields()` method on nova resource
-
-```php
-public function fields(Request $request)
-{
-    return [
-        ...
-        \HenryAvila\EmailTracking\EmailTracking::hasManyEmailsField(),
-        ...
-    ];
-}
 ```
 
 ---

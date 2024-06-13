@@ -2,7 +2,6 @@
 
 namespace HenryAvila\EmailTracking\Controllers;
 
-use HenryAvila\EmailTracking\Middleware\Webhooks\MailgunWebhookMiddleware;
 use HenryAvila\EmailTracking\Models\Email;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -10,21 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class MailgunWebhookController extends Controller
 {
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware(MailgunWebhookMiddleware::class);
-    }
-
-    /**
-     * Handles the Stripe Webhook call.
-     *
-     * @param Request $request
-     *
-     * @return mixed
-     */
     public function __invoke(Request $request)
     {
         try {
@@ -80,6 +64,7 @@ class MailgunWebhookController extends Controller
             return response()->json(['success' => $success]);
         } catch (\Exception $exception) {
             Log::error('Mailgun webhook', $exception);
+            abort(500);
         }
     }
 }
