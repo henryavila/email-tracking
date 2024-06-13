@@ -29,10 +29,20 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v5.0.0 - 2024-06-13
+
+### What's Changed
+
+* Bump ramsey/composer-install from 2 to 3 by @dependabot in https://github.com/henryavila/email-tracking/pull/19
+* Remove Laravel Nova Dependency by @henryavila in https://github.com/henryavila/email-tracking/pull/22
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v4.0.2...v5.0.0
 
 ## v4.0.2 - 2024-04-11
 
