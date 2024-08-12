@@ -12,9 +12,7 @@ class MailgunWebhookController extends Controller
     public function __invoke(Request $request)
     {
         try {
-            $success = false;
             $data = $request->get('event-data');
-
             $message_id = $data['message']['headers']['message-id'] ?? null;
 
             if ($message_id === null) {
@@ -29,41 +27,52 @@ class MailgunWebhookController extends Controller
             $email = Email::where('message_id', $message_id)->first();
 
 
-            if ($email) {
-                if ($data['event'] === 'opened' || $data['event'] === 'clicked') {
-                    $email->{$data['event']}++;
+            if ($email === null) {
+                Log::warning('Email not found', [
+                    'message_id' => $message_id,
+                    'data' => $data,
+                ]);
 
-                    $firstField = 'first_' . $data['event'] . '_at';
-                    $lastField = 'last_' . $data['event'] . '_at';
-
-                    if (isset($email->{$firstField})) {
-                        $email->{$lastField} = now();
-                    } else {
-                        $email->{$firstField} = now();
-                    }
-                }
-
-                if ($data['event'] === 'delivered' || $data['event'] === 'failed') {
-                    $email->{$data['event'] . '_at'} = now();
-                }
-
-                if (isset($data['delivery-status']['attempt-no'])) {
-                    $email->delivery_status_attempts = $data['delivery-status']['attempt-no'];
-                }
-
-                if (isset($data['delivery-status']['message'])) {
-                    $email->delivery_status_message = $email->delivery_status_message ?? '';
-                    $join = empty($email->delivery_status_message) ? '' : '||'; // we will not add the join string if this is the first message
-                    $email->delivery_status_message .= $join . now()->format('d/m/Y H:i:s') . ' - ' . $data['delivery-status']['message'];
-                }
-
-                $email->save();
-                $success = true;
+                return response()->json(['success' => false]);
             }
 
-            return response()->json(['success' => $success]);
+            if ($data['event'] === 'opened' || $data['event'] === 'clicked') {
+                $email->{$data['event']}++;
+
+                $firstField = 'first_' . $data['event'] . '_at';
+                $lastField = 'last_' . $data['event'] . '_at';
+
+                if (isset($email->{$firstField})) {
+                    $email->{$lastField} = now();
+                } else {
+                    $email->{$firstField} = now();
+                }
+            }
+
+            if ($data['event'] === 'delivered' || $data['event'] === 'failed') {
+                $email->{$data['event'] . '_at'} = now();
+            }
+
+            if (isset($data['delivery-status']['attempt-no'])) {
+                $email->delivery_status_attempts = $data['delivery-status']['attempt-no'];
+            }
+
+            if (isset($data['delivery-status']['message'])) {
+                $email->delivery_status_message = $email->delivery_status_message ?? '';
+                $join = empty($email->delivery_status_message) ? '' : '||'; // we will not add the join string if this is the first message
+                $email->delivery_status_message .= $join . now()->format('d/m/Y H:i:s') . ' - ' . $data['delivery-status']['message'];
+            }
+
+            $email->save();
+
+
+            return response()->json(['success' => true]);
         } catch (\Exception $exception) {
-            Log::error('Mailgun webhook', $exception);
+            Log::error('Mailgun webhook', [
+                    'message' => $exception->getMessage(),
+                    'stack' => $exception->getTrace()
+                ]
+            );
             abort(500);
         }
     }
