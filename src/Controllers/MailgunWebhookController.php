@@ -68,9 +68,11 @@ class MailgunWebhookController extends Controller
 
             return response()->json(['success' => true]);
         } catch (\Exception $exception) {
-            Log::error('Mailgun webhook', [
+            Log::error(
+                'Mailgun webhook',
+                [
                     'message' => $exception->getMessage(),
-                    'stack' => $exception->getTrace()
+                    'stack' => $exception->getTrace(),
                 ]
             );
             abort(500);
