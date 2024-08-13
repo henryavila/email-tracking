@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking;
 
 use Spatie\LaravelPackageTools\Package;
@@ -16,8 +18,6 @@ class EmailTrackingServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('email-tracking')
-            ->hasConfigFile()
-            ->hasTranslations()
             ->hasRoute('webhooks')
             ->hasMigration('create_emails_table')
             ->hasMigration('add_body_content_to_email_log');

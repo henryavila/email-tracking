@@ -68,13 +68,6 @@ return [
 
 ```
 
-
-Publish the lang files (optional) with:
-
-```bash
-php artisan vendor:publish --tag="email-tracking-translations"
-```
-
 ---
 
 ## Configuration

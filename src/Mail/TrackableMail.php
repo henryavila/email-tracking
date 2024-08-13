@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -13,9 +15,7 @@ class TrackableMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public $model, public string $viewName, public $viewData = [])
-    {
-    }
+    public function __construct(public $model, public string $viewName, public $viewData = []) {}
 
     public function content(): Content
     {

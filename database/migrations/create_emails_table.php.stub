@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('cc')->nullable();
             $table->string('bcc')->nullable();
             $table->string('reply_to')->nullable();
-            $table->dateTime('delivered_at', env('DATE_TIME_PRECISION', 3))->nullable();
-            $table->dateTime('failed_at', env('DATE_TIME_PRECISION', 3))->nullable();
+            $table->dateTime('delivered_at')->nullable();
+            $table->dateTime('failed_at')->nullable();
             $table->integer('opened')->default(0);
             $table->integer('clicked')->default(0);
             $table->unsignedMediumInteger('delivery_status_attempts')->nullable();

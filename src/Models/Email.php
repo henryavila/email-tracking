@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Models;
 
 use Carbon\Carbon;
@@ -26,14 +28,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property Carbon $last_clicked_at
  * @property int $opened
  * @property int $clicked
- *
  * @property string $body_html
  * @property string $body_txt
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
- *
  * @property mixed $sender
  */
 class Email extends Model

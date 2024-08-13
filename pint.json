@@ -1,0 +1,18 @@
+{
+  "preset": "laravel",
+  "rules": {
+    "combine_consecutive_unsets": true,
+    "concat_space": true,
+    "declare_strict_types": true,
+    "combine_consecutive_issets": true,
+    "explicit_string_variable": true,
+    "fully_qualified_strict_types": true
+  },
+  "exclude": [
+    "build"
+  ],
+  "notName": [
+  ],
+  "notPath": [
+  ]
+}
