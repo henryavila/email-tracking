@@ -51,7 +51,7 @@ class MailgunWebhookMiddleware
         $timestamp = $request->input('signature.timestamp');
         $signature = $request->input('signature.signature');
 
-        if (abs(time() - (int)$timestamp) > 15) {
+        if (abs(time() - (int) $timestamp) > 15) {
             return false;
         }
 
