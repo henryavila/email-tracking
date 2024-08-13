@@ -29,9 +29,6 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('services.mailgun.secret', 'key-9999999999999999999999999');
-
-        $migration = include __DIR__.'/../database/migrations/create_emails_table.php.stub';
-        $migration->up();
     }
 
     /**
