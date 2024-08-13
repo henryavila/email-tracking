@@ -91,6 +91,13 @@ it('passes if the signature is valid', function () {
     $signature = hash_hmac('sha256', $timestamp.$token, 'test_secret');
     Config::set('services.mailgun.secret', 'test_secret');
     $requestData = [
+        'event-data' => [
+            'message' => [
+                'headers' => [
+                    'message-id' => '123456',
+                ],
+            ],
+        ],
         'signature' => [
             'token' => $token,
             'timestamp' => $timestamp,
@@ -103,7 +110,6 @@ it('passes if the signature is valid', function () {
         ->and($response->content())->json()
         ->and($response->json())->toBeArray();
 
-    $request = new Request($requestData);
     $middleware = new MailgunWebhookMiddleware;
 
     $requestData['signature']['timestamp'] = time() - 10;

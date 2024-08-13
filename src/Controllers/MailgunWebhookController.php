@@ -23,6 +23,7 @@ class MailgunWebhookController // extends Controller
                     'headers' => $data['message']['headers'] ?? null,
                     'full' => $data,
                 ]);
+                abort(400);
             }
 
             /** @var Email $email */
