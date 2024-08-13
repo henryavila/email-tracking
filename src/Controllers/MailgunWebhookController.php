@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Controllers;
 
 use HenryAvila\EmailTracking\Models\Email;
@@ -7,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 
-class MailgunWebhookController extends Controller
+class MailgunWebhookController // extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -26,7 +28,6 @@ class MailgunWebhookController extends Controller
             /** @var Email $email */
             $email = Email::where('message_id', $message_id)->first();
 
-
             if ($email === null) {
                 Log::warning('Email not found', [
                     'message_id' => $message_id,
@@ -39,8 +40,8 @@ class MailgunWebhookController extends Controller
             if ($data['event'] === 'opened' || $data['event'] === 'clicked') {
                 $email->{$data['event']}++;
 
-                $firstField = 'first_' . $data['event'] . '_at';
-                $lastField = 'last_' . $data['event'] . '_at';
+                $firstField = 'first_'.$data['event'].'_at';
+                $lastField = 'last_'.$data['event'].'_at';
 
                 if (isset($email->{$firstField})) {
                     $email->{$lastField} = now();
@@ -50,7 +51,7 @@ class MailgunWebhookController extends Controller
             }
 
             if ($data['event'] === 'delivered' || $data['event'] === 'failed') {
-                $email->{$data['event'] . '_at'} = now();
+                $email->{$data['event'].'_at'} = now();
             }
 
             if (isset($data['delivery-status']['attempt-no'])) {
@@ -60,11 +61,10 @@ class MailgunWebhookController extends Controller
             if (isset($data['delivery-status']['message'])) {
                 $email->delivery_status_message = $email->delivery_status_message ?? '';
                 $join = empty($email->delivery_status_message) ? '' : '||'; // we will not add the join string if this is the first message
-                $email->delivery_status_message .= $join . now()->format('d/m/Y H:i:s') . ' - ' . $data['delivery-status']['message'];
+                $email->delivery_status_message .= $join.now()->format('d/m/Y H:i:s').' - '.$data['delivery-status']['message'];
             }
 
             $email->save();
-
 
             return response()->json(['success' => true]);
         } catch (\Exception $exception) {

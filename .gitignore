@@ -14,3 +14,5 @@ node_modules
 .php-cs-fixer.cache
 report
 .phpunit.*
+tests/.cache
+tests/.coverage

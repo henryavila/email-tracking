@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Traits;
 
 use HenryAvila\EmailTracking\Models\Email;

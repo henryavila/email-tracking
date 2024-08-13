@@ -1,0 +1,32 @@
+name: Check & fix styling
+
+on: [ push ]
+
+jobs:
+  laravel-pint-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install Composer Dependencies
+        run: |
+          composer config http-basic.nova.laravel.com ${{ secrets.LARAVEL_NOVA_USERNAME }} ${{ secrets.LARAVEL_NOVA4_TOKEN }}
+          composer config github-oauth.github.com ${{ secrets.GH_TOKEN }}
+          composer install
+
+      - name: "laravel-pint"
+        run: ./vendor/bin/pint
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Laravel Pint Fix

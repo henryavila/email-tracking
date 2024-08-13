@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Listeners;
 
 use HenryAvila\EmailTracking\Models\Email;
@@ -12,7 +14,6 @@ class LogEmailSentListener
      * This will be trigged when an e-mail will be sent.
      * If the Mail sender called registerSender(), the sender will be linked to Email object
      *
-     * @param MessageSent $event
      * @return void
      */
     public function handle(MessageSent $event)

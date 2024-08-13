@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Middleware\Webhooks;
 
 use Closure;
@@ -11,8 +13,7 @@ class MailgunWebhookMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -32,6 +33,7 @@ class MailgunWebhookMiddleware
      * Build the signature from POST data
      *
      * @see https://documentation.mailgun.com/user_manual.html#securing-webhooks
+     *
      * @return string
      */
     private function buildSignature($request)
@@ -53,6 +55,6 @@ class MailgunWebhookMiddleware
             return false;
         }
 
-        return hash_equals(hash_hmac('sha256', $timestamp . $token, config('services.mailgun.secret')), $signature);
+        return hash_equals(hash_hmac('sha256', $timestamp.$token, config('services.mailgun.secret')), $signature);
     }
 }

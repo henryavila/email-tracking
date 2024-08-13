@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;
@@ -9,9 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
  */
 class TrackableNotificationMailMessage extends MailMessage
 {
-    public function __construct(public $model = null)
-    {
-    }
+    public function __construct(public $model = null) {}
 
     public function toArray(): array
     {
