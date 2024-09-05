@@ -176,6 +176,8 @@ public function toMail($notifiable): MailMessage
 {
     return (new \HenryAvila\EmailTracking\Notifications\TrackableNotificationMailMessage($this->model))
         ->line('The introduction to the notification.')
+        ->blankLine()
+        ->line('Another line, after a blank line')
         ->action('Notification Action', url('/'))
         ->line('Thank you for using our application!');
 }
