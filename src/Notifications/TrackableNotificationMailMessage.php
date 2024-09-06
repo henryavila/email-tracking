@@ -28,4 +28,11 @@ class TrackableNotificationMailMessage extends MailMessage
     {
         return $this->line(new HtmlString('<p></p><br />'));
     }
+
+    public function blankLineIf(bool $condition): self
+    {
+        return $condition ?
+            $this->blankLine() :
+            $this;
+    }
 }
