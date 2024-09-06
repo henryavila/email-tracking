@@ -34,10 +34,19 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v5.3.0 - 2024-09-06
+
+### What's Changed
+
+* Add the method blankLineIf() by @henryavila in https://github.com/henryavila/email-tracking/pull/28
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v5.2.0...v5.3.0
 
 ## v5.2.0 - 2024-09-05
 
