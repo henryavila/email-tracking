@@ -178,6 +178,7 @@ public function toMail($notifiable): MailMessage
         ->line('The introduction to the notification.')
         ->blankLine()
         ->line('Another line, after a blank line')
+        ->blankLineIf($condition)
         ->action('Notification Action', url('/'))
         ->line('Thank you for using our application!');
 }
