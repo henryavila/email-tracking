@@ -23,7 +23,7 @@ class EventData
 
     public readonly DeliveryStatus $deliveryStatus;
 
-    public readonly Failed $failed;
+    public ?Failed $failed = null;
 
     public function __construct(public readonly ?array $rawData)
     {
@@ -41,8 +41,9 @@ class EventData
         $this->envelope = new Envelope($rawData['envelope']);
         $this->deliveryStatus = new DeliveryStatus($rawData['deliveryStatus']);
 
-        $this->failed = new Failed($this);
-
+        if ($this->isFailed()) {
+            $this->failed = new Failed($this);
+        }
     }
 
     public function hasDeliveryMessage(): bool
@@ -95,6 +96,6 @@ class EventData
 
     public function isFailed(): bool
     {
-        return $this->failed->isFailed;
+        return $this->eventIs(Event::FAILED);
     }
 }
