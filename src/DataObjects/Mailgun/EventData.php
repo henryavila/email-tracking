@@ -98,4 +98,14 @@ class EventData
     {
         return $this->eventIs(Event::FAILED);
     }
+
+    public function isPermanentlyFailed(): bool
+    {
+        return $this->isFailed() && $this->failed->isPermanently;
+    }
+
+    public function isTemporaryFailed(): bool
+    {
+        return $this->isFailed() && ! $this->failed->isPermanently;
+    }
 }
