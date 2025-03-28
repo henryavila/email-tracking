@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\DataObjects\Mailgun;
 
+use HenryAvila\EmailTracking\DataObjects\Mailgun\Message\Message;
 use HenryAvila\EmailTracking\Enums\Mailgun\Event;
 use Illuminate\Support\Facades\Log;
 
@@ -17,7 +18,7 @@ class EventData
 
     public readonly ?string $recipient;
 
-    public readonly ?array $message;
+    public readonly Message $message;
 
     public readonly DeliveryStatus $deliveryStatus;
 
@@ -28,6 +29,7 @@ class EventData
 
     public function __construct(public readonly ?array $rawData)
     {
+        // TODO: Remove. It should be dont just in DataObject
         $this->messageId = $rawData['message']['headers']['message-id'] ?? null;
 
         $this->validateData();
@@ -39,7 +41,10 @@ class EventData
 
         // Filled depending on the event
         $this->recipient = $rawData['recipient'] ?? null;
-        $this->message = $rawData['message'] ?? null;
+
+        $this->message = new Message($rawData['message']);
+
+        // TODO: Crate Data Object for: Envelope
 
         $this->deliveryStatus = new DeliveryStatus($rawData['deliveryStatus']);
     }
