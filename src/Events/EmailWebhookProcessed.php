@@ -11,5 +11,5 @@ class EmailWebhookProcessed
 {
     use Dispatchable;
 
-    public function __construct(EventData $eventData) {}
+    public function __construct(public readonly EventData $eventData) {}
 }
