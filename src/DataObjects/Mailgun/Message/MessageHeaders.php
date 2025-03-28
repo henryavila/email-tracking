@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\DataObjects\Mailgun\Message;
 
 class MessageHeaders
 {
     public readonly string $messageId;
+
     public readonly ?string $from;
+
     public readonly ?string $to;
+
     public readonly ?string $subject;
 
-    public function __construct(public readonly ?string $rawData)
+    public function __construct(public readonly ?array $rawData)
     {
         $this->validateData();
 
@@ -25,5 +30,4 @@ class MessageHeaders
             throw new \DomainException('Message id not found on Message headers');
         }
     }
-
 }
