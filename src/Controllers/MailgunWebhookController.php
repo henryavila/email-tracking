@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Controllers;
 
+use HenryAvila\EmailTracking\DataObjects\Mailgun\EventData;
+use HenryAvila\EmailTracking\Enums\Mailgun\Event;
+use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
 use HenryAvila\EmailTracking\Models\Email;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 
 class MailgunWebhookController // extends Controller
@@ -14,35 +16,25 @@ class MailgunWebhookController // extends Controller
     public function __invoke(Request $request)
     {
         try {
-            $data = $request->get('event-data');
-            $message_id = $data['message']['headers']['message-id'] ?? null;
-
-            if ($message_id === null) {
-                Log::warning('Empty messageId on Mailgun hook', [
-                    'message' => $data['message'] ?? null,
-                    'headers' => $data['message']['headers'] ?? null,
-                    'full' => $data,
-                ]);
-                abort(400);
-            }
+            $eventData = new EventData($request->get('event-data'));
 
             /** @var Email $email */
-            $email = Email::where('message_id', $message_id)->first();
+            $email = Email::where('message_id', $eventData->messageId)->first();
 
             if ($email === null) {
                 Log::warning('Email not found', [
-                    'message_id' => $message_id,
-                    'data' => $data,
+                    'message_id' => $eventData->messageId,
+                    'data' => $eventData->rawData,
                 ]);
 
                 return response()->json(['success' => false]);
             }
 
-            if ($data['event'] === 'opened' || $data['event'] === 'clicked') {
-                $email->{$data['event']}++;
+            if ($eventData->eventIsAny([Event::OPENED, Event::CLICKED])) {
+                $email->{$eventData->event->value}++;
 
-                $firstField = 'first_'.$data['event'].'_at';
-                $lastField = 'last_'.$data['event'].'_at';
+                $firstField = 'first_'.$eventData->event->value.'_at';
+                $lastField = 'last_'.$eventData->event->value.'_at';
 
                 if (isset($email->{$firstField})) {
                     $email->{$lastField} = now();
@@ -51,21 +43,25 @@ class MailgunWebhookController // extends Controller
                 }
             }
 
-            if ($data['event'] === 'delivered' || $data['event'] === 'failed') {
-                $email->{$data['event'].'_at'} = now();
+            if ($eventData->eventIsAny([Event::DELIVERED, Event::FAILED])) {
+                $email->{$eventData->event->value.'_at'} = now();
             }
 
-            if (isset($data['delivery-status']['attempt-no'])) {
-                $email->delivery_status_attempts = $data['delivery-status']['attempt-no'];
-            }
+            $email->delivery_status_attempts = $eventData->getDeliveryAttemptNumber();
 
-            if (isset($data['delivery-status']['message'])) {
-                $email->delivery_status_message = $email->delivery_status_message ?? '';
-                $join = empty($email->delivery_status_message) ? '' : '||'; // we will not add the join string if this is the first message
-                $email->delivery_status_message .= $join.now()->format('d/m/Y H:i:s').' - '.$data['delivery-status']['message'];
+            if ($eventData->hasDeliveryMessage()) {
+                $logLine = now()->format('d/m/Y H:i:s').' - '.$eventData->getDeliveryMessage();
+                $messages = empty($email->delivery_status_message)
+                    ? []
+                    : explode('||', $email->delivery_status_message);
+                $messages[] = $logLine;
+                $email->delivery_status_message = implode('||', $messages);
+
             }
 
             $email->save();
+
+            EmailWebhookProcessed::dispatch($eventData);
 
             return response()->json(['success' => true]);
         } catch (\Exception $exception) {

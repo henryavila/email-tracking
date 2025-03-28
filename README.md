@@ -194,6 +194,12 @@ Notification::send($clientes, new SampleNotification($user));
 
 ---
 
+## Events
+When the app intercept a webhook, The following event will be dispatched `HenryAvila\EmailTracking\Events\EmailWebhookProcessed`.
+Note that this event will be dispatched after the webhook has been successfully processed. If any erro happens, the event will not be dispatched.
+
+---
+
 ## Testing
 
 ```bash
