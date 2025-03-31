@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\DataObjects\Mailgun;
 
-use Illuminate\Support\Facades\Log;
-
 class DeliveryStatus
 {
     public readonly bool $isTls;

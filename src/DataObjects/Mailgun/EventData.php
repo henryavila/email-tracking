@@ -108,5 +108,4 @@ class EventData
     {
         return $this->isFailed() && ! $this->failed->isPermanently;
     }
-
 }
