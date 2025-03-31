@@ -35,10 +35,21 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.0.0 - 2025-03-31
+
+### What's Changed
+
+* Dispatch event on webhook interseption by @henryavila in https://github.com/henryavila/email-tracking/pull/30
+* Require php 8.2
+* Suppot Laravel 12
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v5.3.0...v6.0.0
 
 ## v5.3.0 - 2024-09-06
 
