@@ -19,9 +19,9 @@ class EventData
 
     public readonly Message $message;
 
-    public readonly Envelope $envelope;
+    public readonly ?Envelope $envelope;
 
-    public readonly DeliveryStatus $deliveryStatus;
+    public readonly ?DeliveryStatus $deliveryStatus;
 
     public ?Failed $failed = null;
 
@@ -38,8 +38,8 @@ class EventData
 
         // Filled depending on the event
         $this->recipient = $rawData['recipient'] ?? null;
-        $this->envelope = new Envelope($rawData['envelope']);
-        $this->deliveryStatus = new DeliveryStatus($rawData['deliveryStatus']);
+        $this->envelope = isset($rawData['envelope']) ? new Envelope($rawData['envelope']) : null;
+        $this->deliveryStatus = isset($rawData['delivery-status']) ? new DeliveryStatus($rawData['delivery-status']) : null;
 
         if ($this->isFailed()) {
             $this->failed = new Failed($this);
@@ -63,15 +63,15 @@ class EventData
 
     private function validateData(): void
     {
-        if (empty($data['event'])) {
+        if (empty($this->rawData['event'])) {
             throw new \DomainException('Empty event on Mailgun hook');
         }
 
-        if (empty($data['timestamp'])) {
+        if (empty($this->rawData['timestamp'])) {
             throw new \DomainException('Empty timestamp on Mailgun hook');
         }
 
-        if (empty($data['id'])) {
+        if (empty($this->rawData['id'])) {
             throw new \DomainException('Empty id on Mailgun hook');
         }
     }
@@ -108,4 +108,5 @@ class EventData
     {
         return $this->isFailed() && ! $this->failed->isPermanently;
     }
+
 }

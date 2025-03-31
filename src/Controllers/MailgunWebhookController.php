@@ -19,15 +19,15 @@ class MailgunWebhookController // extends Controller
             $eventData = new EventData($request->get('event-data'));
 
             /** @var Email $email */
-            $email = Email::where('message_id', $eventData->messageId)->first();
+            $email = Email::where('message_id', $eventData->getMessageId())->first();
 
             if ($email === null) {
                 Log::warning('Email not found', [
-                    'message_id' => $eventData->messageId,
+                    'message_id' => $eventData->getMessageId(),
                     'data' => $eventData->rawData,
                 ]);
 
-                return response()->json(['success' => false]);
+                return abort(404, 'Email not found');
             }
 
             if ($eventData->eventIsAny([Event::OPENED, Event::CLICKED])) {
