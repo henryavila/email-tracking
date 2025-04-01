@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Events\Email;
 
-use HenryAvila\EmailTracking\Contracts\HasEnvelopeAndMessage;
-use HenryAvila\EmailTracking\Traits\HasEnvelopeAndMessageTrait;
+use HenryAvila\EmailTracking\Contracts\HasEnvelope;
+use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class SpamComplaintsEmailEvent extends AbstractEmailEvent implements HasEnvelopeAndMessage
+class SpamComplaintsEmailEvent extends AbstractEmailEvent implements HasEnvelope
 {
-    use HasEnvelopeAndMessageTrait;
+    use HasEnvelopeTrait;
 
     const CODE = 'complained';
 
     public function __construct(array $payload)
     {
         parent::__construct($payload);
-        $this->initializeEnvelopeAndMessage($payload);
+        $this->initializeEnvelope($payload);
     }
 }

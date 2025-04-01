@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Events\Email;
 
+use HenryAvila\EmailTracking\Contracts\HasDeliveryStatus;
 use HenryAvila\EmailTracking\Contracts\HasEmailFlags;
-use HenryAvila\EmailTracking\Contracts\HasEnvelopeAndMessage;
-use HenryAvila\EmailTracking\DataObjects\Mailgun\DeliveryStatus;
+use HenryAvila\EmailTracking\Contracts\HasEnvelope;
+use HenryAvila\EmailTracking\Traits\HasDeliveryStatusTrait;
 use HenryAvila\EmailTracking\Traits\HasEmailFlagsTrait;
-use HenryAvila\EmailTracking\Traits\HasEnvelopeAndMessageTrait;
+use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class DeliveredEmailEvent extends AbstractEmailEvent implements HasEmailFlags, HasEnvelopeAndMessage
+class DeliveredEmailEvent extends AbstractEmailEvent implements HasEmailFlags, HasEnvelope, HasDeliveryStatus
 {
     use HasEmailFlagsTrait;
-    use HasEnvelopeAndMessageTrait;
+    use HasEnvelopeTrait;
+    use HasDeliveryStatusTrait;
 
     const CODE = 'delivered';
 
-    public DeliveryStatus $deliveryStatus;
 
     public function __construct(array $payload)
     {
         parent::__construct($payload);
 
         $this->initializeFlags($payload);
-        $this->initializeEnvelopeAndMessage($payload);
-
-        $this->deliveryStatus = new DeliveryStatus($payload['delivery-status']);
+        $this->initializeEnvelope($payload);
+        $this->initializeDeliveryStatus($payload);
     }
 }

@@ -15,6 +15,7 @@ class EmailEventFactory
             Email\ClickedEmailEvent::CODE => new Email\ClickedEmailEvent($payload),
             Email\SpamComplaintsEmailEvent::CODE => new Email\SpamComplaintsEmailEvent($payload),
             Email\DeliveredEmailEvent::CODE => new Email\DeliveredEmailEvent($payload),
+            Email\OpenedEmailEvent::CODE => new Email\OpenedEmailEvent($payload),
 
             default => throw new \InvalidArgumentException('Invalid event type: '.$payload['event']),
         };

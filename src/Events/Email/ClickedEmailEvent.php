@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Events\Email;
 
-use HenryAvila\EmailTracking\Contracts\HasEnvelopeAndMessage;
-use HenryAvila\EmailTracking\DataObjects\Mailgun\ClientInfo;
-use HenryAvila\EmailTracking\DataObjects\Mailgun\Geolocation;
-use HenryAvila\EmailTracking\Traits\HasEnvelopeAndMessageTrait;
+use HenryAvila\EmailTracking\Contracts\HasClientInfo;
+use HenryAvila\EmailTracking\Contracts\HasEnvelope;
+use HenryAvila\EmailTracking\Traits\HasClientInfoTrait;
+use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelopeAndMessage
+class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelope, HasClientInfo
 {
-    use HasEnvelopeAndMessageTrait;
+    use HasEnvelopeTrait;
+    use HasClientInfoTrait;
 
     const CODE = 'clicked';
 
@@ -19,20 +20,15 @@ class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelopeAndMess
 
     public string $url;
 
-    public ClientInfo $clientInfo;
-
-    public Geolocation $geolocation;
-
     public function __construct(array $payload)
     {
         parent::__construct($payload);
 
-        $this->initializeEnvelopeAndMessage($payload);
+        $this->initializeEnvelope($payload);
+        $this->initializeClientInfo($payload);
 
         $this->ip = $payload['ip'] ?? '';
         $this->url = $payload['url'] ?? '';
 
-        $this->clientInfo = new ClientInfo($payload['client-info']);
-        $this->geolocation = new Geolocation($payload['geolocation']);
     }
 }
