@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 use HenryAvila\EmailTracking\Contracts\HasEmailFlags;
@@ -14,6 +16,7 @@ class DeliveredEmailEvent extends AbstractEmailEvent implements HasEmailFlags, H
     use HasEnvelopeAndMessageTrait;
 
     const CODE = 'delivered';
+
     public DeliveryStatus $deliveryStatus;
 
     public function __construct(array $payload)

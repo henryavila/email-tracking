@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 use HenryAvila\EmailTracking\Contracts\HasEmailFlags;
@@ -11,10 +13,12 @@ class AcceptedEmailEvent extends AbstractEmailEvent implements HasEmailFlags, Ha
 {
     use HasEmailFlagsTrait;
     use HasEnvelopeAndMessageTrait;
-    const CODE = 'accepted';
-    public string $recipientProvider;
-    public string $method;
 
+    const CODE = 'accepted';
+
+    public string $recipientProvider;
+
+    public string $method;
 
     public function __construct(array $payload)
     {
@@ -26,5 +30,4 @@ class AcceptedEmailEvent extends AbstractEmailEvent implements HasEmailFlags, Ha
         $this->recipientProvider = $payload['recipient-provider'] ?? '';
         $this->method = $payload['method'] ?? '';
     }
-
 }

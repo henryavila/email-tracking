@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 class AbstractEmailEvent
@@ -10,7 +12,7 @@ class AbstractEmailEvent
 
     public function __construct(public readonly array $payload)
     {
-        $this->timestamp = (string)$payload['timestamp'];
+        $this->timestamp = (string) $payload['timestamp'];
         $this->id = $payload['id'];
     }
 }

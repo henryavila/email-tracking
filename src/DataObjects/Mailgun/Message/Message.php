@@ -15,7 +15,7 @@ class Message
     public function __construct(?array $payload)
     {
         $this->attachments = $payload['attachments'] ?? null;
-        $this->size = isset($payload['size']) ? (int)$payload['size'] : null;
+        $this->size = isset($payload['size']) ? (int) $payload['size'] : null;
         $this->headers = new MessageHeaders($payload['headers']);
     }
 

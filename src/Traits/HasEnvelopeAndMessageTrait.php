@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Traits;
 
 use HenryAvila\EmailTracking\DataObjects\Mailgun\Envelope;
@@ -8,10 +10,15 @@ use HenryAvila\EmailTracking\DataObjects\Mailgun\Message\Message;
 trait HasEnvelopeAndMessageTrait
 {
     public Envelope $envelope;
+
     public Message $message;
+
     public array $campaigns = [];
+
     public string $recipient = '';
+
     public string $recipientDomain = '';
+
     public array $tags = [];
 
     public function initializeEnvelopeAndMessage(array $payload): void

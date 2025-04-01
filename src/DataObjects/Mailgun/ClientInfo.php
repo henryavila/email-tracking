@@ -1,14 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\DataObjects\Mailgun;
 
 class ClientInfo
 {
     public ?string $clientName;
+
     public ?string $clientOs;
+
     public ?string $clientType;
+
     public ?string $deviceType;
+
     public ?string $userAgent;
+
     public ?string $bot;
 
     public function __construct(array $payload)

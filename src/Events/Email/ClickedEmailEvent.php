@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 use HenryAvila\EmailTracking\Contracts\HasEnvelopeAndMessage;
@@ -10,8 +12,11 @@ use HenryAvila\EmailTracking\Traits\HasEnvelopeAndMessageTrait;
 class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelopeAndMessage
 {
     use HasEnvelopeAndMessageTrait;
+
     const CODE = 'clicked';
+
     public string $ip;
+
     public string $url;
 
     public ClientInfo $clientInfo;
@@ -25,7 +30,7 @@ class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelopeAndMess
         $this->initializeEnvelopeAndMessage($payload);
 
         $this->ip = $payload['ip'] ?? '';
-        $this->url = $payload['url']  ?? '';
+        $this->url = $payload['url'] ?? '';
 
         $this->clientInfo = new ClientInfo($payload['client-info']);
         $this->geolocation = new Geolocation($payload['geolocation']);
