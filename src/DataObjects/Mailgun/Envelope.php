@@ -14,11 +14,11 @@ class Envelope
 
     public readonly ?string $targets;
 
-    public function __construct(public readonly ?array $rawData)
+    public function __construct(array $payload)
     {
-        $this->transport = $rawData['transport'] ?? null;
-        $this->sender = $rawData['sender'] ?? null;
-        $this->sendingIp = $rawData['sending-ip'] ?? null;
-        $this->targets = $rawData['targets'] ?? null;
+        $this->transport = $payload['transport'] ?? null;
+        $this->sender = $payload['sender'] ?? null;
+        $this->sendingIp = $payload['sending-ip'] ?? null;
+        $this->targets = $payload['targets'] ?? null;
     }
 }

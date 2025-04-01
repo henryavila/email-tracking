@@ -14,20 +14,15 @@ class MessageHeaders
 
     public readonly ?string $subject;
 
-    public function __construct(public readonly ?array $rawData)
+    public function __construct(?array $payload)
     {
-        $this->validateData();
-
-        $this->messageId = $rawData['message-id'];
-        $this->from = $rawData['from'] ?? null;
-        $this->to = $rawData['to'] ?? null;
-        $this->subject = $rawData['subject'] ?? null;
-    }
-
-    public function validateData(): void
-    {
-        if (empty($this->rawData) || empty($this->rawData['message-id'])) {
-            throw new \DomainException('Message id not found on Message headers');
+        if (empty($payload['message-id'])) {
+            throw new \InvalidArgumentException('Message ID is required');
         }
+
+        $this->messageId = $payload['message-id'];
+        $this->from = $payload['from'] ?? null;
+        $this->to = $payload['to'] ?? null;
+        $this->subject = $payload['subject'] ?? null;
     }
 }
