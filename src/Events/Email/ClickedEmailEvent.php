@@ -9,10 +9,10 @@ use HenryAvila\EmailTracking\Contracts\HasEnvelope;
 use HenryAvila\EmailTracking\Traits\HasClientInfoTrait;
 use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class ClickedEmailEvent extends AbstractEmailEvent implements HasEnvelope, HasClientInfo
+class ClickedEmailEvent extends AbstractEmailEvent implements HasClientInfo, HasEnvelope
 {
-    use HasEnvelopeTrait;
     use HasClientInfoTrait;
+    use HasEnvelopeTrait;
 
     const CODE = 'clicked';
 

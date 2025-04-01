@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HenryAvila\EmailTracking\Controllers;
 
 use HenryAvila\EmailTracking\DataObjects\Mailgun\EventData;
-use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
 use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 use HenryAvila\EmailTracking\Models\Email;
@@ -16,7 +15,6 @@ class MailgunWebhookController // extends Controller
 {
     public function __invoke(Request $request)
     {
-
 
         $emailEvent = EmailEventFactory::make($request->get('event-data'));
         dump($emailEvent);

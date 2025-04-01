@@ -13,7 +13,6 @@ trait HasClientInfoTrait
 
     public Geolocation $geolocation;
 
-
     public function initializeClientInfo(array $payload): void
     {
         if (isset($payload['client-info'])) {

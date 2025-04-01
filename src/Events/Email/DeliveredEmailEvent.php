@@ -11,14 +11,13 @@ use HenryAvila\EmailTracking\Traits\HasDeliveryStatusTrait;
 use HenryAvila\EmailTracking\Traits\HasEmailFlagsTrait;
 use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class DeliveredEmailEvent extends AbstractEmailEvent implements HasEmailFlags, HasEnvelope, HasDeliveryStatus
+class DeliveredEmailEvent extends AbstractEmailEvent implements HasDeliveryStatus, HasEmailFlags, HasEnvelope
 {
+    use HasDeliveryStatusTrait;
     use HasEmailFlagsTrait;
     use HasEnvelopeTrait;
-    use HasDeliveryStatusTrait;
 
     const CODE = 'delivered';
-
 
     public function __construct(array $payload)
     {

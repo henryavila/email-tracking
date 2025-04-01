@@ -11,6 +11,7 @@ class AbstractEmailEvent
     public string $timestamp;
 
     public string $id;
+
     public Message $message;
 
     public ?string $recipient;
@@ -19,7 +20,7 @@ class AbstractEmailEvent
 
     public function __construct(public readonly array $payload)
     {
-        $this->timestamp = (string)$payload['timestamp'];
+        $this->timestamp = (string) $payload['timestamp'];
         $this->id = $payload['id'];
 
         $this->recipient = $payload['recipient'] ?? null;

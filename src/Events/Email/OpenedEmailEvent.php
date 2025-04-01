@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 use HenryAvila\EmailTracking\Contracts\HasClientInfo;
-use HenryAvila\EmailTracking\Contracts\HasDeliveryStatus;
 use HenryAvila\EmailTracking\Traits\HasClientInfoTrait;
-use HenryAvila\EmailTracking\Traits\HasDeliveryStatusTrait;
 
 class OpenedEmailEvent extends AbstractEmailEvent implements HasClientInfo
 {
@@ -22,5 +22,4 @@ class OpenedEmailEvent extends AbstractEmailEvent implements HasClientInfo
         $this->ip = $payload['ip'] ?? null;
         $this->initializeClientInfo($payload);
     }
-
 }

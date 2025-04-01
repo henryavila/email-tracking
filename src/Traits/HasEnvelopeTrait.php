@@ -10,7 +10,6 @@ trait HasEnvelopeTrait
 {
     public Envelope $envelope;
 
-
     public array $campaigns = [];
 
     public array $tags = [];
