@@ -19,6 +19,7 @@ class DeliveryStatus
     public readonly ?string $name;
 
     public readonly ?int $attemptNumber;
+    public readonly ?int $retrySeconds;
 
     public readonly ?string $deliveryMessage;
 
@@ -27,6 +28,7 @@ class DeliveryStatus
         $this->isTls = $this->rawData['tls'] ?? true;
         $this->mxHost = $this->rawData['mx-host'] ?? null;
         $this->code = isset($this->rawData['code']) ? (int) $this->rawData['code'] : null;
+        $this->retrySeconds = isset($this->rawData['retry-seconds']) ? (int) $this->rawData['retry-seconds'] : null;
         $this->description = $this->rawData['description'] ?? null;
         $this->isUtf8 = $this->rawData['utf8'] ?? true;
         $this->attemptNumber = isset($this->rawData['attempt-no']) ? (int) $this->rawData['attempt-no'] : null;

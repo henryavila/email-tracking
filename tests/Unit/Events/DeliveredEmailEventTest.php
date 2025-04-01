@@ -55,7 +55,8 @@ it('creates a delivered email event from payload', closure: function () {
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
-    expect($event instanceof DeliveredEmailEvent)
+    expect($event)
+        ->toBeInstanceOf(DeliveredEmailEvent::class)
         ->and($event->id)->toBe('CPgfbmQMTCKtHW6uIWtuVe')
         ->and($event->timestamp)->toBe('1521472262.908181')
         //

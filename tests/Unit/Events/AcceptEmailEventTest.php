@@ -39,7 +39,8 @@ it('creates an accepted email event from payload', function () {
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
-    expect($event instanceof AcceptedEmailEvent)
+    expect($event)
+        ->toBeInstanceOf(AcceptedEmailEvent::class)
         ->and($event->id)->toBe('nIKIiE5URaSr-8WsuiCrBB')
         ->and($event->timestamp)->toBe('1521472262.908181')
         ->and($event->method)->toBe('HTTP')
@@ -47,14 +48,17 @@ it('creates an accepted email event from payload', function () {
         ->and($event->isTestMode)->toBeFalse()
         ->and($event->isRouted)->toBeNull()
         ->and($event->isSystemTest)->toBeNull()
+        //
         ->and($event->envelope->transport)->toBe('smtp')
         ->and($event->envelope->sender)->toBe('bob@alertas.crcmg.org.br')
         ->and($event->envelope->targets)->toBe('alice@example.com')
+        //
         ->and($event->message->size)->toBe(256)
         ->and($event->message->headers->to)->toBe('Alice <alice@example.com>')
         ->and($event->message->headers->messageId)->toBe('20130503182626.18666.16540@alertas.crcmg.org.br')
         ->and($event->message->headers->from)->toBe('Bob <bob@alertas.crcmg.org.br>')
         ->and($event->message->headers->subject)->toBe('Test accepted webhook')
+        //
         ->and($event->recipient)->toBe('alice@example.com')
         ->and($event->recipientDomain)->toBe('example.com')
         ->and($event->tags)->toBe(['my_tag_1', 'my_tag_2']);

@@ -4,20 +4,31 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Factories;
 
-use HenryAvila\EmailTracking\Events\Email;
+
+use HenryAvila\EmailTracking\Events\Email\AbstractEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\AbstractFailureEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\ClickedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\PermanentFailureEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
 
 class EmailEventFactory
 {
-    public static function make(array $payload): Email\AbstractEmailEvent
+    public static function make(array $payload): AbstractEmailEvent
     {
-        return match ($payload['event']) {
-            Email\AcceptedEmailEvent::CODE => new Email\AcceptedEmailEvent($payload),
-            Email\ClickedEmailEvent::CODE => new Email\ClickedEmailEvent($payload),
-            Email\SpamComplaintsEmailEvent::CODE => new Email\SpamComplaintsEmailEvent($payload),
-            Email\DeliveredEmailEvent::CODE => new Email\DeliveredEmailEvent($payload),
-            Email\OpenedEmailEvent::CODE => new Email\OpenedEmailEvent($payload),
-
-            default => throw new \InvalidArgumentException('Invalid event type: '.$payload['event']),
+        return match (true) {
+            $payload['event'] === AcceptedEmailEvent::CODE => new AcceptedEmailEvent($payload),
+            $payload['event'] === ClickedEmailEvent::CODE => new ClickedEmailEvent($payload),
+            $payload['event'] === SpamComplaintsEmailEvent::CODE => new SpamComplaintsEmailEvent($payload),
+            $payload['event'] === DeliveredEmailEvent::CODE => new DeliveredEmailEvent($payload),
+            $payload['event'] === OpenedEmailEvent::CODE => new OpenedEmailEvent($payload),
+            $payload['event'] === AbstractFailureEmailEvent::CODE && $payload['severity'] === 'permanent' => new PermanentFailureEmailEvent($payload),
+            $payload['event'] === AbstractFailureEmailEvent::CODE && $payload['severity'] === 'temporary' => new TemporaryFailureEmailEvent($payload),
+            // Unsubscribe
+            default => throw new \InvalidArgumentException('Invalid event type: ' . $payload['event']),
         };
     }
 }

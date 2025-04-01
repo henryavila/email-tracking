@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
+use HenryAvila\EmailTracking\Factories\EmailEventFactory;
+
 it('create a opened email event from payload', function () {
     $payload = json_decode(<<<'JSON'
  {
@@ -42,10 +45,11 @@ it('create a opened email event from payload', function () {
 JSON, true
     );
 
-    /** @var HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent $event */
-    $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
+    /** @var OpenedEmailEvent $event */
+    $event = EmailEventFactory::make($payload);
 
-    expect($event)->toBeInstanceOf(HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent::class)
+    expect($event)
+        ->toBeInstanceOf(OpenedEmailEvent::class)
         ->and($event->id)->toBe('Ase7i2zsRYeDXztHGENqRA')
         ->and($event->timestamp)->toBe('1521243339.873676')
         ->and($event->message->headers->messageId)->toBe('20130503182626.18666.16540@alertas.crcmg.org.br')

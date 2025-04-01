@@ -41,7 +41,8 @@ it('creates a clicked email event from payload', function () {
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
-    expect($event instanceof ClickedEmailEvent)
+    expect($event)
+        ->toBeInstanceOf(ClickedEmailEvent::class)
         ->and($event->id)->toBe('Ase7i2zsRYeDXztHGENqRA')
         ->and($event->timestamp)->toBe('1521243339.873676')
         ->and($event->recipient)->toBe('alice@example.com')

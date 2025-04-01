@@ -38,7 +38,8 @@ it('creates a complained email event from payload', function () {
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
-    expect($event instanceof SpamComplaintsEmailEvent)
+    expect($event)
+        ->toBeInstanceOf(SpamComplaintsEmailEvent::class)
         ->and($event->id)->toBe('-Agny091SquKnsrW2NEKUA')
         ->and($event->timestamp)->toBe('1521233123.501324')
         ->and($event->recipient)->toBe('alice@example.com')
