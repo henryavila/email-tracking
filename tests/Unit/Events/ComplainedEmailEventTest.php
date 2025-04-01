@@ -1,40 +1,41 @@
 <?php
 
-use HenryAvila\EmailTracking\Events\Email\ComplainedEmailEvent;
+declare(strict_types=1);
+
 use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
 
 it('creates a complained email event from payload', function () {
     $payload = [
-        "id" => "-Agny091SquKnsrW2NEKUA",
-        "timestamp" => "1521233123.501324",
-        "log-level" => "warn",
-        "event" => "complained",
-        "envelope" => [
-            "sending-ip" => "173.193.210.33"
+        'id' => '-Agny091SquKnsrW2NEKUA',
+        'timestamp' => '1521233123.501324',
+        'log-level' => 'warn',
+        'event' => 'complained',
+        'envelope' => [
+            'sending-ip' => '173.193.210.33',
         ],
-        "flags" => [
-            "is-test-mode" => false
+        'flags' => [
+            'is-test-mode' => false,
         ],
-        "message" => [
-            "headers" => [
-                "to" => "Alice <alice@example.com>",
-                "message-id" => "20110215055645.25246.63817@alertas.crcmg.org.br",
-                "from" => "Bob <bob@alertas.crcmg.org.br>",
-                "subject" => "Test complained webhook"
+        'message' => [
+            'headers' => [
+                'to' => 'Alice <alice@example.com>',
+                'message-id' => '20110215055645.25246.63817@alertas.crcmg.org.br',
+                'from' => 'Bob <bob@alertas.crcmg.org.br>',
+                'subject' => 'Test complained webhook',
             ],
-            "attachments" => [],
-            "size" => 111
+            'attachments' => [],
+            'size' => 111,
         ],
-        "recipient" => "alice@example.com",
-        "campaigns" => [],
-        "tags" => [
-            "my_tag_1",
-            "my_tag_2"
-        ]
+        'recipient' => 'alice@example.com',
+        'campaigns' => [],
+        'tags' => [
+            'my_tag_1',
+            'my_tag_2',
+        ],
     ];
 
     /** @var SpamComplaintsEmailEvent $event */
-    $event = \HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
+    $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
     expect($event instanceof SpamComplaintsEmailEvent)

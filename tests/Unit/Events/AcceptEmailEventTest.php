@@ -1,40 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
 
 it('creates an accepted email event from payload', function () {
     $payload = [
-        "event" => "accepted",
-        "id" => "nIKIiE5URaSr-8WsuiCrBB",
-        "timestamp" => '1521472262.908181',
-        "api-key-id" => "aff8axxx-23990xxx",
-        "flags" => [
-            "is-authenticated" => true,
-            "is-test-mode" => false
+        'event' => 'accepted',
+        'id' => 'nIKIiE5URaSr-8WsuiCrBB',
+        'timestamp' => '1521472262.908181',
+        'api-key-id' => 'aff8axxx-23990xxx',
+        'flags' => [
+            'is-authenticated' => true,
+            'is-test-mode' => false,
         ],
-        "envelope" => [
-            "transport" => "smtp",
-            "sender" => "bob@alertas.crcmg.org.br",
-            "targets" => "alice@example.com"
+        'envelope' => [
+            'transport' => 'smtp',
+            'sender' => 'bob@alertas.crcmg.org.br',
+            'targets' => 'alice@example.com',
         ],
-        "message" => [
-            "headers" => [
-                "to" => "Alice <alice@example.com>",
-                "message-id" => "20130503182626.18666.16540@alertas.crcmg.org.br",
-                "from" => "Bob <bob@alertas.crcmg.org.br>",
-                "subject" => "Test accepted webhook"
+        'message' => [
+            'headers' => [
+                'to' => 'Alice <alice@example.com>',
+                'message-id' => '20130503182626.18666.16540@alertas.crcmg.org.br',
+                'from' => 'Bob <bob@alertas.crcmg.org.br>',
+                'subject' => 'Test accepted webhook',
             ],
-            "attachments" => [],
-            "size" => 256
+            'attachments' => [],
+            'size' => 256,
         ],
-        "recipient" => "alice@example.com",
-        "recipient-domain" => "example.com",
-        "method" => "HTTP",
-        "tags" => ["my_tag_1", "my_tag_2"],
+        'recipient' => 'alice@example.com',
+        'recipient-domain' => 'example.com',
+        'method' => 'HTTP',
+        'tags' => ['my_tag_1', 'my_tag_2'],
     ];
 
     /** @var AcceptedEmailEvent $event */
-    $event = \HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
+    $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
 
     // Verifica propriedades básicas do evento
     expect($event instanceof AcceptedEmailEvent)
