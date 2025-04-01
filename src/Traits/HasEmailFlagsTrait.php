@@ -16,7 +16,7 @@ trait HasEmailFlagsTrait
 
     public function initializeFlags(array $payload): void
     {
-        $this->isRouted = $payload['flags']['routed'] ?? null;
+        $this->isRouted = $payload['flags']['is-routed'] ?? null;
         $this->isAuthenticated = $payload['flags']['is-authenticated'] ?? null;
         $this->isSystemTest = $payload['flags']['is-system-test'] ?? null;
         $this->isTestMode = $payload['flags']['is-test-mode'] ?? null;
