@@ -19,6 +19,7 @@ class DeliveryStatus
     public readonly ?string $name;
 
     public readonly ?int $attemptNumber;
+
     public readonly ?int $retrySeconds;
 
     public readonly ?string $deliveryMessage;

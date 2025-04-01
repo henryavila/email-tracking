@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HenryAvila\EmailTracking\Events\Email;
 
 use HenryAvila\EmailTracking\Contracts\HasDeliveryStatus;
@@ -9,11 +11,14 @@ use HenryAvila\EmailTracking\Traits\HasDeliveryStatusTrait;
 use HenryAvila\EmailTracking\Traits\HasEmailFlagsTrait;
 use HenryAvila\EmailTracking\Traits\HasEnvelopeTrait;
 
-class AbstractFailureEmailEvent extends AbstractEmailEvent implements HasEmailFlags, HasEnvelope, HasDeliveryStatus
+class AbstractFailureEmailEvent extends AbstractEmailEvent implements HasDeliveryStatus, HasEmailFlags, HasEnvelope
 {
-    use HasEmailFlagsTrait, HasEnvelopeTrait, HasDeliveryStatusTrait;
+    use HasDeliveryStatusTrait, HasEmailFlagsTrait, HasEnvelopeTrait;
+
     const CODE = 'failed';
+
     public string $reason;
+
     public bool $permanent;
 
     public function __construct(array $payload)

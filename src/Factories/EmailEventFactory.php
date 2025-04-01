@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HenryAvila\EmailTracking\Factories;
 
-
 use HenryAvila\EmailTracking\Events\Email\AbstractEmailEvent;
 use HenryAvila\EmailTracking\Events\Email\AbstractFailureEmailEvent;
 use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
@@ -28,7 +27,7 @@ class EmailEventFactory
             $payload['event'] === AbstractFailureEmailEvent::CODE && $payload['severity'] === 'permanent' => new PermanentFailureEmailEvent($payload),
             $payload['event'] === AbstractFailureEmailEvent::CODE && $payload['severity'] === 'temporary' => new TemporaryFailureEmailEvent($payload),
             // Unsubscribe
-            default => throw new \InvalidArgumentException('Invalid event type: ' . $payload['event']),
+            default => throw new \InvalidArgumentException('Invalid event type: '.$payload['event']),
         };
     }
 }
