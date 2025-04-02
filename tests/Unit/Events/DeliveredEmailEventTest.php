@@ -5,51 +5,8 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
 
 it('creates a "delivered" email event from payload', closure: function () {
-    $payload = [
-        'id' => 'CPgfbmQMTCKtHW6uIWtuVe',
-        'timestamp' => '1521472262.908181',
-        'log-level' => 'info',
-        'event' => 'delivered',
-        'delivery-status' => [
-            'tls' => true,
-            'mx-host' => 'smtp-in.example.com',
-            'code' => 250,
-            'description' => '',
-            'session-seconds' => 0.4331989288330078,
-            'utf8' => true,
-            'attempt-no' => 1,
-            'message' => 'OK',
-            'certificate-verified' => true,
-        ],
-        'flags' => [
-            'is-routed' => false,
-            'is-authenticated' => true,
-            'is-system-test' => false,
-            'is-test-mode' => false,
-        ],
-        'envelope' => [
-            'transport' => 'smtp',
-            'sender' => 'bob@alertas.crcmg.org.br',
-            'sending-ip' => '209.61.154.250',
-            'targets' => 'alice@example.com',
-        ],
-        'message' => [
-            'headers' => [
-                'to' => 'Alice <alice@example.com>',
-                'message-id' => '20130503182626.18666.16540@alertas.crcmg.org.br',
-                'from' => 'Bob <bob@alertas.crcmg.org.br>',
-                'subject' => 'Test delivered webhook',
-            ],
-            'attachments' => [],
-            'size' => 111,
-        ],
-        'recipient' => 'alice@example.com',
-        'recipient-domain' => 'example.com',
-        'tags' => [
-            'my_tag_1',
-            'my_tag_2',
-        ],
-    ];
+    $json = file_get_contents(__DIR__.'/json/delivered.json');
+    $payload = json_decode($json, true);
 
     /** @var DeliveredEmailEvent $event */
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);

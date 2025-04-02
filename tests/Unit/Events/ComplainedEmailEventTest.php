@@ -5,34 +5,8 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
 
 it('creates a "complained" email event from payload', function () {
-    $payload = [
-        'id' => '-Agny091SquKnsrW2NEKUA',
-        'timestamp' => '1521233123.501324',
-        'log-level' => 'warn',
-        'event' => 'complained',
-        'envelope' => [
-            'sending-ip' => '173.193.210.33',
-        ],
-        'flags' => [
-            'is-test-mode' => false,
-        ],
-        'message' => [
-            'headers' => [
-                'to' => 'Alice <alice@example.com>',
-                'message-id' => '20110215055645.25246.63817@alertas.crcmg.org.br',
-                'from' => 'Bob <bob@alertas.crcmg.org.br>',
-                'subject' => 'Test complained webhook',
-            ],
-            'attachments' => [],
-            'size' => 111,
-        ],
-        'recipient' => 'alice@example.com',
-        'campaigns' => [],
-        'tags' => [
-            'my_tag_1',
-            'my_tag_2',
-        ],
-    ];
+    $json = file_get_contents(__DIR__.'/json/complained.json');
+    $payload = json_decode($json, true);
 
     /** @var SpamComplaintsEmailEvent $event */
     $event = HenryAvila\EmailTracking\Factories\EmailEventFactory::make($payload);
