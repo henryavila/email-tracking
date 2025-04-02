@@ -212,34 +212,77 @@ class EmailWebhookProcessed
 To implement the listener, you can use the `EmailWebhookProcessed` event. This event contains the specific email event that was processed.
 
 ```php
-use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
-use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
-...
+<?php
+declare(strict_types=1);
 
-class ProcessEmailWebhook
+namespace App\Listeners;
+
+use HenryAvila\EmailTracking\Events\Email\AbstractEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\ClickedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\PermanentFailureEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\UnsubscribeEmailEvent;
+use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
+
+class MailgunWebhookProcessedListener
 {
     public function handle(EmailWebhookProcessed $event): void
     {
         match ($event->emailEvent::class) {
-            AcceptedEmailEvent::class => $this->handleAcceptedEvent($event->emailEvent),
-            ClickedEmailEvent::class => $this->handleClickedEvent($event->emailEvent),
-            OpenedEmailEvent::class => $this->handleOpenedEvent($event->emailEvent),
-            DeliveredEmailEvent::class => $this->handleDeliveryEvent($event->emailEvent),
-            PermanentFailureEmailEvent::class => $this->handlePermanentFailure($event->emailEvent),
-            TemporaryFailureEmailEvent::class => $this->handleTemporaryFailure($event->emailEvent),
-            SpamComplaintsEmailEvent::class => $this->handleSpamComplaint($event->emailEvent),
-            UnsubscribeEmailEvent::class => $this->handleUnsubscribe($event->emailEvent),
-            
-            default => throw new \InvalidArgumentException("Event not Supported {$event->emailEvent::class}"),
+            AcceptedEmailEvent::class => $this->handleAcceptedEmailEvent($event->emailEvent),
+            ClickedEmailEvent::class => $this->handleClickedEmailEvent($event->emailEvent),
+            DeliveredEmailEvent::class => $this->handleDeliveredEmailEvent($event->emailEvent),
+            OpenedEmailEvent::class => $this->handleOpenedEmailEvent($event->emailEvent),
+            PermanentFailureEmailEvent::class => $this->handlePermanentFailureEmailEvent($event->emailEvent),
+            TemporaryFailureEmailEvent::class => $this->handleTemporaryFailureEmailEvent($event->emailEvent),
+            SpamComplaintsEmailEvent::class => $this->handleSpamComplaintsEmailEvent($event->emailEvent),
+            UnsubscribeEmailEvent::class => $this->handleUnsubscribeEmailEvent($event->emailEvent),
         };
     }
 
-    private function handleAcceptedEvent(AcceptedEmailEvent $event): void 
+    private function handleAcceptedEmailEvent(AcceptedEmailEvent $emailEvent)
     {
-        // Process the accepted event
+        // Implement your logic for handling accepted email events here
     }
 
-    // ... Add other event handlers here
+    private function handleClickedEmailEvent(ClickedEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling clicked email events here
+    }
+
+    private function handleDeliveredEmailEvent(DeliveredEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling delivered email events here
+    }
+
+    private function handleOpenedEmailEvent(OpenedEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling opened email events here
+    }
+
+    private function handlePermanentFailureEmailEvent(PermanentFailureEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling permanent failure email events here
+    }
+
+    private function handleTemporaryFailureEmailEvent(TemporaryFailureEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling temporary failure email events here
+    }
+
+    private function handleSpamComplaintsEmailEvent(SpamComplaintsEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling spam complaints email events here
+    }
+
+    private function handleUnsubscribeEmailEvent(UnsubscribeEmailEvent $emailEvent)
+    {
+        // Implement your logic for handling unsubscribe email events here
+    }
 }
 ``` 
 
