@@ -194,12 +194,67 @@ Notification::send($clientes, new SampleNotification($user));
 
 ---
 
-## Events
-When the app intercept a webhook, The following event will be dispatched `HenryAvila\EmailTracking\Events\EmailWebhookProcessed`.
-Note that this event will be dispatched after the webhook has been successfully processed. If any erro happens, the event will not be dispatched.
+## Webhook Events
 
-TODO: Exemplo de implentação de listener
----
+When a Mailgun webhook is successfully processed, the `EmailWebhookProcessed` event is automatically dispatched. This event contains the specific email event that was processed.
+
+### Event Structure
+
+```php
+class EmailWebhookProcessed 
+{
+    public function __construct(public readonly AbstractEmailEvent $emailEvent)
+    {
+    }
+}
+```
+### Implementing the Listener
+To implement the listener, you can use the `EmailWebhookProcessed` event. This event contains the specific email event that was processed.
+
+```php
+use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
+use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
+...
+
+class ProcessEmailWebhook
+{
+    public function handle(EmailWebhookProcessed $event): void
+    {
+        match ($event->emailEvent::class) {
+            AcceptedEmailEvent::class => $this->handleAcceptedEvent($event->emailEvent),
+            ClickedEmailEvent::class => $this->handleClickedEvent($event->emailEvent),
+            OpenedEmailEvent::class => $this->handleOpenedEvent($event->emailEvent),
+            DeliveredEmailEvent::class => $this->handleDeliveryEvent($event->emailEvent),
+            PermanentFailureEmailEvent::class => $this->handlePermanentFailure($event->emailEvent),
+            TemporaryFailureEmailEvent::class => $this->handleTemporaryFailure($event->emailEvent),
+            SpamComplaintsEmailEvent::class => $this->handleSpamComplaint($event->emailEvent),
+            UnsubscribeEmailEvent::class => $this->handleUnsubscribe($event->emailEvent),
+            
+            default => throw new \InvalidArgumentException("Event not Supported {$event->emailEvent::class}"),
+        };
+    }
+
+    private function handleAcceptedEvent(AcceptedEmailEvent $event): void 
+    {
+        // Process the accepted event
+    }
+
+    // ... Add other event handlers here
+}
+``` 
+
+### Available Event Types
+
+The EmailWebhookProcessed event wraps one of the following event types:
+
+ - **AcceptedEmailEvent**: Email accepted for delivery
+ - **ClickedEmailEvent**: Link clicked in email
+ - **OpenedEmailEvent**: Email opened
+ - **DeliveredEmailEvent**: Email successfully delivered
+ - **PermanentFailureEmailEvent**: Permanent delivery failure
+ - **TemporaryFailureEmailEvent**: Temporary delivery failure
+ - **SpamComplaintsEmailEvent**: Spam complaint
+ - **UnsubscribeEmailEvent**: Unsubscribe request
 
 ## Testing
 

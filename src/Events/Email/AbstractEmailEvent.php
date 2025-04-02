@@ -30,4 +30,20 @@ class AbstractEmailEvent
             $this->message = new Message($payload['message']);
         }
     }
+
+    public function getMessageId(): string
+    {
+        return $this->message->getMessageId();
+    }
+
+    public function isAnyOf(array $eventTypes): bool
+    {
+        foreach ($eventTypes as $type) {
+            if ($this instanceof $type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

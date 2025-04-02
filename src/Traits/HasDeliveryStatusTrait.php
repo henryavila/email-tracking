@@ -16,4 +16,19 @@ trait HasDeliveryStatusTrait
             $this->deliveryStatus = new DeliveryStatus($payload['delivery-status']);
         }
     }
+
+    public function getDeliveryAttemptNumber(): int
+    {
+        return $this->deliveryStatus->attemptNumber;
+    }
+
+    public function hasDeliveryMessage(): bool
+    {
+        return ! empty($this->deliveryStatus->deliveryMessage);
+    }
+
+    public function getDeliveryMessage(): ?string
+    {
+        return $this->deliveryStatus->deliveryMessage;
+    }
 }
