@@ -30,4 +30,13 @@ class AbstractFailureEmailEvent extends AbstractEmailEvent implements HasDeliver
         $this->initializeEnvelope($payload);
         $this->initializeDeliveryStatus($payload);
     }
+
+    public function getFullErrorMessage(): string
+    {
+        $reason = $this->reason;
+        $message = $this->getDeliveryMessage();
+        $description = $this->deliveryStatus->description;
+
+        return implode(" | ", array_filter([$reason, $message, $description]));
+    }
 }
