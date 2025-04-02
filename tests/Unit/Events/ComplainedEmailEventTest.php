@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
 
-it('creates a complained email event from payload', function () {
+it('creates a "complained" email event from payload', function () {
     $payload = [
         'id' => '-Agny091SquKnsrW2NEKUA',
         'timestamp' => '1521233123.501324',

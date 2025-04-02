@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 use HenryAvila\EmailTracking\Events\Email\PermanentFailureEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
-it('crate a permanent failure email event from payload', function () {
-    $payload = json_decode(<<<'JSON'
+it('crate a "permanent failure" email event from payload', function () {
+    $payload = json_decode(<<<JSON
 {
         "id": "G9Bn5sl1TC6nu79C8C0bwg",
         "timestamp": "1521233195.375624",

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
-it('crate a permanent failure email event from payload', function () {
+it('crate a "temporary failure" email event from payload', function () {
 
     $payload = json_decode(<<<'JSON'
 {

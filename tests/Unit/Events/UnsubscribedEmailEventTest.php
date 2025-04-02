@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\UnsubscribeEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
-it('create a "opened" email event from payload', function () {
+it('create a "unsubscribed" email event from payload', function () {
     $payload = json_decode(<<<'JSON'
  {
         "id": "Ase7i2zsRYeDXztHGENqRA",
         "timestamp": "1521243339.873676",
         "log-level": "info",
-        "event": "opened",
+        "event": "unsubscribed",
         "message": {
             "headers": {
                 "message-id": "20130503182626.18666.16540@alertas.crcmg.org.br"
@@ -45,11 +45,11 @@ it('create a "opened" email event from payload', function () {
 JSON, true
     );
 
-    /** @var OpenedEmailEvent $event */
+    /** @var UnsubscribeEmailEvent $event */
     $event = EmailEventFactory::make($payload);
 
     expect($event)
-        ->toBeInstanceOf(OpenedEmailEvent::class)
+        ->toBeInstanceOf(UnsubscribeEmailEvent::class)
         ->and($event->id)->toBe('Ase7i2zsRYeDXztHGENqRA')
         ->and($event->timestamp)->toBe('1521243339.873676')
         ->and($event->message->headers->messageId)->toBe('20130503182626.18666.16540@alertas.crcmg.org.br')

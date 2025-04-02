@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
 
-it('creates an accepted email event from payload', function () {
+it('creates an "accepted" email event from payload', function () {
     $payload = [
         'event' => 'accepted',
         'id' => 'nIKIiE5URaSr-8WsuiCrBB',

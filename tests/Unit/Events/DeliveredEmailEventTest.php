@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
 
-it('creates a delivered email event from payload', closure: function () {
+it('creates a "delivered" email event from payload', closure: function () {
     $payload = [
         'id' => 'CPgfbmQMTCKtHW6uIWtuVe',
         'timestamp' => '1521472262.908181',

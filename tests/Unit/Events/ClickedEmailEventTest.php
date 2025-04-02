@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HenryAvila\EmailTracking\Events\Email\ClickedEmailEvent;
 
-it('creates a clicked email event from payload', function () {
+it('creates a "clicked" email event from payload', function () {
     $payload = [
         'id' => 'Ase7i2zsRYeDXztHGENqRA',
         'timestamp' => '1521243339.873676',
