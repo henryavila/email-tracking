@@ -9,6 +9,7 @@ use HenryAvila\EmailTracking\Events\Email\ClickedEmailEvent;
 use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
 use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
 use HenryAvila\EmailTracking\Events\Email\PermanentFailureEmailEvent;
+use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
 use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 use HenryAvila\EmailTracking\Models\Email;
@@ -49,6 +50,9 @@ class MailgunWebhookController // extends Controller
                 }
             }
 
+            if ($emailEvent instanceof TemporaryFailureEmailEvent) {
+                $email->delivery_status_attempts = $emailEvent->getDeliveryAttemptNumber();
+            }
 
             /**
              * @var DeliveredEmailEvent|PermanentFailureEmailEvent $emailEvent

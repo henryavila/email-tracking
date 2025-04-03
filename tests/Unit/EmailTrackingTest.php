@@ -310,6 +310,80 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     assertNull($emailLog->last_clicked_at);
 });
 
+it('can handle mailgun webhook on TEMPORARY FAILED status', function () {
+    $user = User::factory()->create();
+    Event::fake([MessageSent::class]);
+
+    $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
+    Mail::send($mailable);
+
+    // Manually handle MessageSent event to link the message to Email model
+    Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
+        $listener = new LogEmailSentListener;
+        $listener->handle($event);
+
+        return true;
+    });
+
+    /** @var Email $emailLog */
+    $emailLog = Email::first();
+
+    $mailGunRequestData = getMailGunRequestData($emailLog, 'failed-temporary');
+
+    $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
+    assertDatabaseCount((new Email)->getTable(), 1);
+
+    $emailLog = Email::first();
+
+    assertNull($emailLog->delivered_at);
+    assertNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertEquals(1, $emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
+    assertNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
+});
+
+it('can handle mailgun webhook on PERMANENTLY FAILED status', function () {
+    $user = User::factory()->create();
+    Event::fake([MessageSent::class]);
+
+    $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
+    Mail::send($mailable);
+
+    // Manually handle MessageSent event to link the message to Email model
+    Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
+        $listener = new LogEmailSentListener;
+        $listener->handle($event);
+
+        return true;
+    });
+
+    /** @var Email $emailLog */
+    $emailLog = Email::first();
+
+    $mailGunRequestData = getMailGunRequestData($emailLog, 'failed-permanent');
+
+    $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
+    assertDatabaseCount((new Email)->getTable(), 1);
+
+    $emailLog = Email::first();
+
+    assertNull($emailLog->delivered_at);
+    assertNotNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertEquals(1, $emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
+    assertNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
+});
+
 it('can handle mailgun webhook on OPENED status', function () {
     $user = User::factory()->create();
     Event::fake([MessageSent::class]);
@@ -423,9 +497,17 @@ function getMailGunRequestData(Email $emailLog, string $event): array
 
             break;
 
-        case 'failed':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-permanent.json.json');
+        case 'failed-permanent':
+            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-permanent.json');
             $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
+
+            break;
+
+        case 'failed-temporary':
+            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-temporary.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
     }
