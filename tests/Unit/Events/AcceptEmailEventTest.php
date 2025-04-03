@@ -5,7 +5,7 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\AcceptedEmailEvent;
 
 it('creates an "accepted" email event from payload', function () {
-    $json = file_get_contents(__DIR__.'/json/accepted.json');
+    $json = file_get_contents(__DIR__ . '/event-data/accepted.json');
     $payload = json_decode($json, true);
 
     /** @var AcceptedEmailEvent $event */

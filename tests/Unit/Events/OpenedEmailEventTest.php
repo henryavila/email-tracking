@@ -6,7 +6,7 @@ use HenryAvila\EmailTracking\Events\Email\OpenedEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
 it('create a "opened" email event from payload', function () {
-    $json = file_get_contents(__DIR__.'/json/opened.json');
+    $json = file_get_contents(__DIR__ . '/event-data/opened.json');
     $payload = json_decode($json, true);
 
     /** @var OpenedEmailEvent $event */

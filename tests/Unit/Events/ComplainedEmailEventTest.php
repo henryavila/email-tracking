@@ -5,7 +5,7 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\SpamComplaintsEmailEvent;
 
 it('creates a "complained" email event from payload', function () {
-    $json = file_get_contents(__DIR__.'/json/complained.json');
+    $json = file_get_contents(__DIR__ . '/event-data/complained.json');
     $payload = json_decode($json, true);
 
     /** @var SpamComplaintsEmailEvent $event */

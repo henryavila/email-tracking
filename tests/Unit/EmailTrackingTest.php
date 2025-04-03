@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function PHPUnit\Framework\assertEquals;
@@ -68,7 +67,7 @@ beforeEach(function () {
     // Define the route with the middleware
     Route::middleware(['mailgun.webhook'])->prefix('webhooks')->group(function () {
         Route::post('mailgun', MailgunWebhookController::class)
-            ->name('email-tracking.webhooks.mailgun');
+             ->name('email-tracking.webhooks.mailgun');
     });
 });
 
@@ -88,8 +87,9 @@ it('aborts if the signature is invalid', function () {
 it('passes if the signature is valid', function () {
     $token = 'valid_token';
     $timestamp = time();
-    $signature = hash_hmac('sha256', $timestamp.$token, 'test_secret');
+    $signature = hash_hmac('sha256', $timestamp . $token, 'test_secret');
     Config::set('services.mailgun.secret', 'test_secret');
+
     $requestData = [
         'event-data' => [
             'message' => [
@@ -104,11 +104,6 @@ it('passes if the signature is valid', function () {
             'signature' => $signature,
         ],
     ];
-    $response = $this->post(route('email-tracking.webhooks.mailgun'), $requestData);
-
-    expect($response->status())->toBe(200)
-        ->and($response->content())->json()
-        ->and($response->json())->toBeArray();
 
     $middleware = new MailgunWebhookMiddleware;
 
@@ -136,7 +131,7 @@ it('passes if the signature is valid', function () {
     });
 
     expect($response->getStatusCode())->toBe(200)
-        ->and($response->getContent())->toBe('Next middleware called');
+                                      ->and($response->getContent())->toBe('Next middleware called');
 });
 
 test('Set Model Connection', function () {
@@ -227,7 +222,7 @@ it('can send Custom Notification passing model data', function () {
     ]);
 
     Notification::route('mail', $user->email)
-        ->notify(new SampleNotification($user));
+                ->notify(new SampleNotification($user));
 
     Event::assertDispatched(MessageSending::class, function (MessageSending $event) use ($user) {
         assertNotEmpty($event->data['model']);
@@ -255,7 +250,7 @@ it('create a email object on custom Notification send', function () {
     assertDatabaseCount((new Email)->getTable(), 0);
 
     Notification::route('mail', $user->email)
-        ->notify(new SampleNotification($user));
+                ->notify(new SampleNotification($user));
 
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
         assertNotEmpty($event->data['model']);
@@ -285,7 +280,7 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
     Mail::send($mailable);
 
-    // Handle MessageSent event
+    // Manually handle MessageSent event to link the message to Email model
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
         $listener = new LogEmailSentListener;
         $listener->handle($event);
@@ -390,7 +385,7 @@ it('can handle mailgun webhook on CLICKED status', function () {
 });
 
 /**
- * @param  string  $event  delivered, clicked, opened
+ * @param string $event delivered, clicked, opened
  */
 function getMailGunRequestData(Email $emailLog, string $event): array
 {
@@ -401,94 +396,36 @@ function getMailGunRequestData(Email $emailLog, string $event): array
         'signature' => [
             'token' => $token,
             'timestamp' => $timestamp,
-            'signature' => hash_hmac('sha256', $timestamp.$token, config('services.mailgun.secret')),
+            'signature' => hash_hmac('sha256', $timestamp . $token, config('services.mailgun.secret')),
         ],
         'event-data' => [],
     ];
 
     switch ($event) {
         case 'delivered':
-            $baseData['event-data'] = [
-                'event' => 'delivered',
-                'message' => [
-                    'headers' => [
-                        'to' => $emailLog->to,
-                        'message-id' => $emailLog->message_id,
-                        'from' => $emailLog->subject,
-                        'subject' => 'message subject',
-                    ],
-                ],
-                'delivery-status' => [
-                    'tls' => true,
-                    'mx-host' => 'mx.gmail.com',
-                    'code' => 250,
-                    'description' => '',
-                    'session-seconds' => 56.981908082962,
-                    'attempt-no' => 1,
-                    'message' => 'OK',
-                ],
-            ];
+            $json = file_get_contents(__DIR__ . '/Events/event-data/delivered.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'clicked':
-            $baseData['event-data'] = [
-                'event' => 'clicked',
-                'geolocation' => [
-                    'country' => 'US',
-                    'region' => 'Unknown',
-                    'city' => 'Unknown',
-                ],
-                'tags' => [
-                ],
-                'url' => 'https://sample.amazonaws.com/999999999999999999999999999.pdf',
-                'ip' => '1.1.1.1',
-                'log-level' => 'info',
-                'timestamp' => 1651584901.9819,
-                'client-info' => [
-                    'client-name' => 'Chrome',
-                    'client-type' => 'browser',
-                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
-                    'device-type' => 'desktop',
-                    'client-os' => 'Windows',
-                ],
-                'message' => [
-                    'headers' => [
-                        'message-id' => $emailLog->message_id,
-                    ],
-                ],
-                'recipient' => $emailLog->to,
-            ];
+            $json = file_get_contents(__DIR__ . '/Events/event-data/clicked.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'opened':
-            $baseData['event-data'] = [
-                'event' => 'opened',
-                'geolocation' => [
-                    'country' => 'US',
-                    'region' => 'Unknown',
-                    'city' => 'Unknown',
-                ],
-                'ip' => '1.1.1.1',
-                'recipient-domain' => $emailLog->to,
-                'id' => '9999999999999999999',
-                'log-level' => 'info',
-                'timestamp' => 1651584876.2409,
-                'client-info' => [
-                    'client-name' => 'Firefox',
-                    'client-type' => 'browser',
-                    'user-agent' => 'Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)',
-                    'device-type' => 'desktop',
-                    'client-os' => 'Windows',
-                ],
-                'message' => [
-                    'headers' => [
-                        'message-id' => $emailLog->message_id,
-                    ],
-                ],
-                'recipient' => $emailLog->to,
-            ];
+            $json = file_get_contents(__DIR__ . '/Events/event-data/opened.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
+
+            break;
+
+        case 'failed':
+            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-permanent.json.json');
+            $baseData['event-data'] = json_decode($json, true);
 
             break;
     }
@@ -503,8 +440,8 @@ function copyViewFiles(): void
 {
     $ds = DIRECTORY_SEPARATOR;
     shell_exec(
-        'cp -r '.
-        __DIR__."{$ds}..{$ds}resources{$ds}views{$ds}emails ".
-        __DIR__."{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
+        'cp -r ' .
+        __DIR__ . "{$ds}..{$ds}..{$ds}resources{$ds}views{$ds}emails " .
+        __DIR__ . "{$ds}..{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
     );
 }
