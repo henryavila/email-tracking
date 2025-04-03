@@ -31,7 +31,10 @@ class MailgunWebhookController // extends Controller
                     'payload' => $emailEvent->payload,
                 ]);
 
-                return abort(404, 'Email not found');
+                return response()->json([
+                    'success' => false,
+                    'message' => "Email not found: {$emailEvent->getMessageId()}",
+                ]);
             }
 
             /**
