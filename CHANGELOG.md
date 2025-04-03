@@ -36,10 +36,33 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.1.0 - 2025-04-03
+
+### What's Changed
+
+* Mailgun Typed Events Support by @henryavila in https://github.com/henryavila/email-tracking/pull/31
+  - Implementation of Mailgun event handling:
+  - Accepted email tracking
+  - Delivered email tracking
+  - Email open tracking
+  - Link click tracking
+  - Spam complaints tracking
+  - Unsubscribe tracking
+  - Failed events tracking:
+    - Temporary failure handling
+    - Permanent failure handling
+    
+  
+
+- Better tests
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.0.0...v6.1.0
 
 ## v6.0.0 - 2025-03-31
 
