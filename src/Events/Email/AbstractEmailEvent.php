@@ -20,7 +20,7 @@ class AbstractEmailEvent
 
     public function __construct(public readonly array $payload)
     {
-        $this->timestamp = (string) $payload['timestamp'];
+        $this->timestamp = (string)$payload['timestamp'];
         $this->id = $payload['id'];
 
         $this->recipient = $payload['recipient'] ?? null;
@@ -45,5 +45,15 @@ class AbstractEmailEvent
         }
 
         return false;
+    }
+
+    public function isFailure(): bool
+    {
+        return self::Class === AbstractFailureEmailEvent::CODE;
+    }
+
+    public function getRecipientWithName(): ? string
+    {
+        return $this->message->headers->to;
     }
 }
