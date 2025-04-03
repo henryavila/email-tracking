@@ -40,8 +40,8 @@ class MailgunWebhookController // extends Controller
             if ($emailEvent->isAnyOf([OpenedEmailEvent::class, ClickedEmailEvent::class])) {
                 $email->{$emailEvent::CODE}++;
 
-                $firstField = 'first_' . $emailEvent::CODE . '_at';
-                $lastField = 'last_' . $emailEvent::CODE . '_at';
+                $firstField = 'first_'.$emailEvent::CODE.'_at';
+                $lastField = 'last_'.$emailEvent::CODE.'_at';
 
                 if (isset($email->{$firstField})) {
                     $email->{$lastField} = now();
@@ -59,11 +59,11 @@ class MailgunWebhookController // extends Controller
              */
             if ($emailEvent->isAnyOf([DeliveredEmailEvent::class, PermanentFailureEmailEvent::class])) {
 
-                $email->{$emailEvent::CODE . '_at'} = now();
+                $email->{$emailEvent::CODE.'_at'} = now();
                 $email->delivery_status_attempts = $emailEvent->getDeliveryAttemptNumber();
 
                 if ($emailEvent->hasDeliveryMessage()) {
-                    $logLine = now()->format('d/m/Y H:i:s') . ' - ' . $emailEvent->getDeliveryMessage();
+                    $logLine = now()->format('d/m/Y H:i:s').' - '.$emailEvent->getDeliveryMessage();
                     $messages = empty($email->delivery_status_message)
                         ? []
                         : explode('||', $email->delivery_status_message);

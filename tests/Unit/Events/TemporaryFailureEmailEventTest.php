@@ -6,7 +6,7 @@ use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
 it('crate a "temporary failure" email event from payload', function () {
-    $json = file_get_contents(__DIR__ . '/event-data/failed-temporary.json');
+    $json = file_get_contents(__DIR__.'/event-data/failed-temporary.json');
     $payload = json_decode($json, true);
 
     /** @var TemporaryFailureEmailEvent $event */

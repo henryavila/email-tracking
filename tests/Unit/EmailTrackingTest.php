@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function PHPUnit\Framework\assertEquals;
@@ -67,7 +68,7 @@ beforeEach(function () {
     // Define the route with the middleware
     Route::middleware(['mailgun.webhook'])->prefix('webhooks')->group(function () {
         Route::post('mailgun', MailgunWebhookController::class)
-             ->name('email-tracking.webhooks.mailgun');
+            ->name('email-tracking.webhooks.mailgun');
     });
 });
 
@@ -87,7 +88,7 @@ it('aborts if the signature is invalid', function () {
 it('passes if the signature is valid', function () {
     $token = 'valid_token';
     $timestamp = time();
-    $signature = hash_hmac('sha256', $timestamp . $token, 'test_secret');
+    $signature = hash_hmac('sha256', $timestamp.$token, 'test_secret');
     Config::set('services.mailgun.secret', 'test_secret');
 
     $requestData = [
@@ -131,7 +132,7 @@ it('passes if the signature is valid', function () {
     });
 
     expect($response->getStatusCode())->toBe(200)
-                                      ->and($response->getContent())->toBe('Next middleware called');
+        ->and($response->getContent())->toBe('Next middleware called');
 });
 
 test('Set Model Connection', function () {
@@ -222,7 +223,7 @@ it('can send Custom Notification passing model data', function () {
     ]);
 
     Notification::route('mail', $user->email)
-                ->notify(new SampleNotification($user));
+        ->notify(new SampleNotification($user));
 
     Event::assertDispatched(MessageSending::class, function (MessageSending $event) use ($user) {
         assertNotEmpty($event->data['model']);
@@ -250,7 +251,7 @@ it('create a email object on custom Notification send', function () {
     assertDatabaseCount((new Email)->getTable(), 0);
 
     Notification::route('mail', $user->email)
-                ->notify(new SampleNotification($user));
+        ->notify(new SampleNotification($user));
 
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
         assertNotEmpty($event->data['model']);
@@ -459,7 +460,7 @@ it('can handle mailgun webhook on CLICKED status', function () {
 });
 
 /**
- * @param string $event delivered, clicked, opened
+ * @param  string  $event  delivered, clicked, opened
  */
 function getMailGunRequestData(Email $emailLog, string $event): array
 {
@@ -470,42 +471,42 @@ function getMailGunRequestData(Email $emailLog, string $event): array
         'signature' => [
             'token' => $token,
             'timestamp' => $timestamp,
-            'signature' => hash_hmac('sha256', $timestamp . $token, config('services.mailgun.secret')),
+            'signature' => hash_hmac('sha256', $timestamp.$token, config('services.mailgun.secret')),
         ],
         'event-data' => [],
     ];
 
     switch ($event) {
         case 'delivered':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/delivered.json');
+            $json = file_get_contents(__DIR__.'/Events/event-data/delivered.json');
             $baseData['event-data'] = json_decode($json, true);
             $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'clicked':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/clicked.json');
+            $json = file_get_contents(__DIR__.'/Events/event-data/clicked.json');
             $baseData['event-data'] = json_decode($json, true);
             $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'opened':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/opened.json');
+            $json = file_get_contents(__DIR__.'/Events/event-data/opened.json');
             $baseData['event-data'] = json_decode($json, true);
             $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'failed-permanent':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-permanent.json');
+            $json = file_get_contents(__DIR__.'/Events/event-data/failed-permanent.json');
             $baseData['event-data'] = json_decode($json, true);
             $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'failed-temporary':
-            $json = file_get_contents(__DIR__ . '/Events/event-data/failed-temporary.json');
+            $json = file_get_contents(__DIR__.'/Events/event-data/failed-temporary.json');
             $baseData['event-data'] = json_decode($json, true);
             $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
@@ -522,8 +523,8 @@ function copyViewFiles(): void
 {
     $ds = DIRECTORY_SEPARATOR;
     shell_exec(
-        'cp -r ' .
-        __DIR__ . "{$ds}..{$ds}..{$ds}resources{$ds}views{$ds}emails " .
-        __DIR__ . "{$ds}..{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
+        'cp -r '.
+        __DIR__."{$ds}..{$ds}..{$ds}resources{$ds}views{$ds}emails ".
+        __DIR__."{$ds}..{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
     );
 }

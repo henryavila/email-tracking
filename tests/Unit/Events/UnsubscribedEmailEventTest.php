@@ -6,7 +6,7 @@ use HenryAvila\EmailTracking\Events\Email\UnsubscribeEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
 it('create a "unsubscribed" email event from payload', function () {
-    $json = file_get_contents(__DIR__ . '/event-data/unsubscribed.json');
+    $json = file_get_contents(__DIR__.'/event-data/unsubscribed.json');
     $payload = json_decode($json, true);
 
     /** @var UnsubscribeEmailEvent $event */

@@ -6,7 +6,7 @@ use HenryAvila\EmailTracking\Events\Email\PermanentFailureEmailEvent;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 
 it('crate a "permanent failure" email event from payload', function () {
-    $json = file_get_contents(__DIR__ . '/event-data/failed-permanent.json');
+    $json = file_get_contents(__DIR__.'/event-data/failed-permanent.json');
     $payload = json_decode($json, true);
 
     /** @var PermanentFailureEmailEvent $event */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use HenryAvila\EmailTracking\Events\Email\DeliveredEmailEvent;
 
 it('creates a "delivered" email event from payload', closure: function () {
-    $json = file_get_contents(__DIR__ . '/event-data/delivered.json');
+    $json = file_get_contents(__DIR__.'/event-data/delivered.json');
     $payload = json_decode($json, true);
 
     /** @var DeliveredEmailEvent $event */
