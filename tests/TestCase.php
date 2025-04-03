@@ -15,7 +15,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'HenryAvila\\EmailTracking\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'HenryAvila\\EmailTracking\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
@@ -29,6 +29,10 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('services.mailgun.secret', 'key-9999999999999999999999999');
+        $app['config']->set('view.paths', [
+            __DIR__ . '/resources/views',
+            resource_path('views'),
+        ]);
     }
 
     /**
