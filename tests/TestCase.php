@@ -29,6 +29,10 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('services.mailgun.secret', 'key-9999999999999999999999999');
+        $app['config']->set('view.paths', [
+            __DIR__.'/resources/views',
+            resource_path('views'),
+        ]);
     }
 
     /**

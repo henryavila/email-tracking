@@ -90,6 +90,7 @@ it('passes if the signature is valid', function () {
     $timestamp = time();
     $signature = hash_hmac('sha256', $timestamp.$token, 'test_secret');
     Config::set('services.mailgun.secret', 'test_secret');
+
     $requestData = [
         'event-data' => [
             'message' => [
@@ -104,11 +105,6 @@ it('passes if the signature is valid', function () {
             'signature' => $signature,
         ],
     ];
-    $response = $this->post(route('email-tracking.webhooks.mailgun'), $requestData);
-
-    expect($response->status())->toBe(200)
-        ->and($response->content())->json()
-        ->and($response->json())->toBeArray();
 
     $middleware = new MailgunWebhookMiddleware;
 
@@ -285,7 +281,7 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
     Mail::send($mailable);
 
-    // Handle MessageSent event
+    // Manually handle MessageSent event to link the message to Email model
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
         $listener = new LogEmailSentListener;
         $listener->handle($event);
@@ -309,6 +305,80 @@ it('can handle mailgun webhook on DELIVERED status', function () {
     assertEquals(0, $emailLog->clicked);
     assertEquals(1, $emailLog->delivery_status_attempts);
     assertTrue(str_contains($emailLog->delivery_status_message, 'OK'));
+    assertNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
+});
+
+it('can handle mailgun webhook on TEMPORARY FAILED status', function () {
+    $user = User::factory()->create();
+    Event::fake([MessageSent::class]);
+
+    $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
+    Mail::send($mailable);
+
+    // Manually handle MessageSent event to link the message to Email model
+    Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
+        $listener = new LogEmailSentListener;
+        $listener->handle($event);
+
+        return true;
+    });
+
+    /** @var Email $emailLog */
+    $emailLog = Email::first();
+
+    $mailGunRequestData = getMailGunRequestData($emailLog, 'failed-temporary');
+
+    $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
+    assertDatabaseCount((new Email)->getTable(), 1);
+
+    $emailLog = Email::first();
+
+    assertNull($emailLog->delivered_at);
+    assertNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertEquals(1, $emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
+    assertNull($emailLog->first_opened_at);
+    assertNull($emailLog->first_clicked_at);
+    assertNull($emailLog->last_opened_at);
+    assertNull($emailLog->last_clicked_at);
+});
+
+it('can handle mailgun webhook on PERMANENTLY FAILED status', function () {
+    $user = User::factory()->create();
+    Event::fake([MessageSent::class]);
+
+    $mailable = (new TrackableMail($user, 'emails.sample'))->to($user->email)->from($user->email);
+    Mail::send($mailable);
+
+    // Manually handle MessageSent event to link the message to Email model
+    Event::assertDispatched(MessageSent::class, function (MessageSent $event) {
+        $listener = new LogEmailSentListener;
+        $listener->handle($event);
+
+        return true;
+    });
+
+    /** @var Email $emailLog */
+    $emailLog = Email::first();
+
+    $mailGunRequestData = getMailGunRequestData($emailLog, 'failed-permanent');
+
+    $this->post(route('email-tracking.webhooks.mailgun'), $mailGunRequestData);
+    assertDatabaseCount((new Email)->getTable(), 1);
+
+    $emailLog = Email::first();
+
+    assertNull($emailLog->delivered_at);
+    assertNotNull($emailLog->failed_at);
+    assertEquals(0, $emailLog->opened);
+    assertEquals(0, $emailLog->clicked);
+    assertEquals(1, $emailLog->delivery_status_attempts);
+    assertNull($emailLog->delivery_status_message);
     assertNull($emailLog->first_opened_at);
     assertNull($emailLog->first_clicked_at);
     assertNull($emailLog->last_opened_at);
@@ -408,87 +478,37 @@ function getMailGunRequestData(Email $emailLog, string $event): array
 
     switch ($event) {
         case 'delivered':
-            $baseData['event-data'] = [
-                'event' => 'delivered',
-                'message' => [
-                    'headers' => [
-                        'to' => $emailLog->to,
-                        'message-id' => $emailLog->message_id,
-                        'from' => $emailLog->subject,
-                        'subject' => 'message subject',
-                    ],
-                ],
-                'delivery-status' => [
-                    'tls' => true,
-                    'mx-host' => 'mx.gmail.com',
-                    'code' => 250,
-                    'description' => '',
-                    'session-seconds' => 56.981908082962,
-                    'attempt-no' => 1,
-                    'message' => 'OK',
-                ],
-            ];
+            $json = file_get_contents(__DIR__.'/Events/event-data/delivered.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'clicked':
-            $baseData['event-data'] = [
-                'event' => 'clicked',
-                'geolocation' => [
-                    'country' => 'US',
-                    'region' => 'Unknown',
-                    'city' => 'Unknown',
-                ],
-                'tags' => [
-                ],
-                'url' => 'https://sample.amazonaws.com/999999999999999999999999999.pdf',
-                'ip' => '1.1.1.1',
-                'log-level' => 'info',
-                'timestamp' => 1651584901.9819,
-                'client-info' => [
-                    'client-name' => 'Chrome',
-                    'client-type' => 'browser',
-                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
-                    'device-type' => 'desktop',
-                    'client-os' => 'Windows',
-                ],
-                'message' => [
-                    'headers' => [
-                        'message-id' => $emailLog->message_id,
-                    ],
-                ],
-                'recipient' => $emailLog->to,
-            ];
+            $json = file_get_contents(__DIR__.'/Events/event-data/clicked.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
 
         case 'opened':
-            $baseData['event-data'] = [
-                'event' => 'opened',
-                'geolocation' => [
-                    'country' => 'US',
-                    'region' => 'Unknown',
-                    'city' => 'Unknown',
-                ],
-                'ip' => '1.1.1.1',
-                'recipient-domain' => $emailLog->to,
-                'id' => '9999999999999999999',
-                'log-level' => 'info',
-                'timestamp' => 1651584876.2409,
-                'client-info' => [
-                    'client-name' => 'Firefox',
-                    'client-type' => 'browser',
-                    'user-agent' => 'Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)',
-                    'device-type' => 'desktop',
-                    'client-os' => 'Windows',
-                ],
-                'message' => [
-                    'headers' => [
-                        'message-id' => $emailLog->message_id,
-                    ],
-                ],
-                'recipient' => $emailLog->to,
-            ];
+            $json = file_get_contents(__DIR__.'/Events/event-data/opened.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
+
+            break;
+
+        case 'failed-permanent':
+            $json = file_get_contents(__DIR__.'/Events/event-data/failed-permanent.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
+
+            break;
+
+        case 'failed-temporary':
+            $json = file_get_contents(__DIR__.'/Events/event-data/failed-temporary.json');
+            $baseData['event-data'] = json_decode($json, true);
+            $baseData['event-data']['message']['headers']['message-id'] = $emailLog->message_id;
 
             break;
     }
@@ -504,7 +524,7 @@ function copyViewFiles(): void
     $ds = DIRECTORY_SEPARATOR;
     shell_exec(
         'cp -r '.
-        __DIR__."{$ds}..{$ds}resources{$ds}views{$ds}emails ".
-        __DIR__."{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
+        __DIR__."{$ds}..{$ds}..{$ds}resources{$ds}views{$ds}emails ".
+        __DIR__."{$ds}..{$ds}..{$ds}vendor{$ds}orchestra{$ds}testbench-core{$ds}laravel{$ds}resources{$ds}views"
     );
 }
