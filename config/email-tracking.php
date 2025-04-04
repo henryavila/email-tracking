@@ -19,7 +19,6 @@ return [
      */
     'log-body-txt' => true,
 
-
     /**
      * When the message_id of mailgun is not found in the database, log it as a warning
      */
