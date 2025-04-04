@@ -6,6 +6,7 @@ namespace HenryAvila\EmailTracking\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -67,5 +68,10 @@ class Email extends Model
     public function sender(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function emailEventLogs(): HasMany
+    {
+        return $this->hasMany(EmailEventLog::class);
     }
 }

@@ -1,14 +1,20 @@
-Rastreamento de e-mail com Laravel
-
-
+# E-mail tracking with Laravel and Mailgun
 
 ## Abandon Laravel Nova
 Since I've abandoned Laravel Nova in favor of Filament, This package will no longer add support to Laravel Nova.
 The exact content of this package with Laravel Nova has been moved to a new package https://packagist.org/packages/henryavila/laravel-nova-email-tracking
-If you are using Laravel Nova, please use this new package.
+If you are using Laravel Nova, please use this new package instead.
 
 ---
+## Version 6.2.0 upgrade
+A new migration has been added to track email events. If you are updating from a previous version, make sure to publish and run migrations again:
 
+```bash
+php artisan vendor:publish --tag="email-tracking-migrations"
+php artisan migrate
+```
+
+--
 
 ## Mailgun configuration
 
