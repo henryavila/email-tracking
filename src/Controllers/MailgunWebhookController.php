@@ -23,8 +23,6 @@ class MailgunWebhookController // extends Controller
     {
         try {
             /** @var AbstractEmailEvent $emailEvent */
-
-
             $emailEvent = EmailEventFactory::make($request->get('event-data'));
             $email = Email::where('message_id', $emailEvent->getMessageId())->first();
 
