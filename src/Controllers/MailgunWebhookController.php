@@ -23,6 +23,8 @@ class MailgunWebhookController // extends Controller
     {
         try {
             /** @var AbstractEmailEvent $emailEvent */
+
+
             $emailEvent = EmailEventFactory::make($request->get('event-data'));
             $email = Email::where('message_id', $emailEvent->getMessageId())->first();
 
@@ -106,7 +108,7 @@ class MailgunWebhookController // extends Controller
         }
 
         $data = [
-            'email_id' => $this->$email->id,
+            'email_id' => $email->id,
             'event_code' => $emailEvent::CODE,
             'event_class' => $emailEvent::class,
             'payload' => json_encode($emailEvent->payload),
