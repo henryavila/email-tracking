@@ -20,8 +20,7 @@ class MessageHeaders
             throw new \InvalidArgumentException('Message ID is required');
         }
 
-        // $this->messageId = $payload['message-id'];
-        $this->messageId = '5bc6c10aae8567484aaeaa07ccc8a6bc@emails.crcmg.org.br';
+        $this->messageId = $payload['message-id'];
         $this->from = $payload['from'] ?? null;
         $this->to = $payload['to'] ?? null;
         $this->subject = $payload['subject'] ?? null;

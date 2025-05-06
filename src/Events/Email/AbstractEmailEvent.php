@@ -56,4 +56,9 @@ class AbstractEmailEvent
     {
         return $this->message->headers->to;
     }
+
+    public function __toString(): string
+    {
+        return json_encode($this->payload, JSON_PRETTY_PRINT);
+    }
 }
