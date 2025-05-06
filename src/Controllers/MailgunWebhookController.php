@@ -13,6 +13,7 @@ use HenryAvila\EmailTracking\Events\Email\TemporaryFailureEmailEvent;
 use HenryAvila\EmailTracking\Events\EmailWebhookProcessed;
 use HenryAvila\EmailTracking\Factories\EmailEventFactory;
 use HenryAvila\EmailTracking\Models\Email;
+use HenryAvila\EmailTracking\Models\EmailEventLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -26,10 +27,12 @@ class MailgunWebhookController // extends Controller
             $email = Email::where('message_id', $emailEvent->getMessageId())->first();
 
             if ($email === null) {
-                Log::warning('Email not found', [
-                    'message_id' => $emailEvent->getMessageId(),
-                    'payload' => $emailEvent->payload,
-                ]);
+                if (config('email-tracking.log-email-not-found')) {
+                    Log::warning('Email not found', [
+                        'message_id' => $emailEvent->getMessageId(),
+                        'payload' => $emailEvent->payload,
+                    ]);
+                }
 
                 return response()->json([
                     'success' => false,
@@ -77,6 +80,8 @@ class MailgunWebhookController // extends Controller
             }
 
             $email->save();
+            $this->logEmailEvent($emailEvent, $email);
+
             EmailWebhookProcessed::dispatch($emailEvent);
 
             return response()->json(['success' => true]);
@@ -92,5 +97,21 @@ class MailgunWebhookController // extends Controller
             abort(500);
 
         }
+    }
+
+    private function logEmailEvent(AbstractEmailEvent $emailEvent, Email $email): void
+    {
+        if (! config('email-tracking.save-email-event-in-database')) {
+            return;
+        }
+
+        $data = [
+            'email_id' => $email->id,
+            'event_code' => $emailEvent::CODE,
+            'event_class' => $emailEvent::class,
+            'payload' => json_encode($emailEvent->payload),
+        ];
+
+        EmailEventLog::create($data);
     }
 }
