@@ -38,10 +38,19 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.2.0 - 2025-05-06
+
+### What's Changed
+
+* Add database logging for Mailgun webhook events by @henryavila in https://github.com/henryavila/email-tracking/pull/33
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.1.1...v6.2.0
 
 ## v6.1.1 - 2025-04-03
 
