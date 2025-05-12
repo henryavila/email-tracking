@@ -39,10 +39,20 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.2.1 - 2025-05-12
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/henryavila/email-tracking/pull/34
+* If email is sending for multiple recipients, display the data just of the email related event by @henryavila in https://github.com/henryavila/email-tracking/pull/35
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.2.0...v6.2.1
 
 ## v6.2.0 - 2025-05-06
 
