@@ -1,6 +1,5 @@
 {
     "name": "henryavila/email-tracking",
-    "version": "6.2.0",
     "description": "Track e-mail delivery with Mailgun Hooks. All data are stored in the database on Email model",
     "keywords": [
         "henryavila",
