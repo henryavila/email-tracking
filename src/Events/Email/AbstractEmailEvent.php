@@ -54,7 +54,12 @@ class AbstractEmailEvent
 
     public function getRecipientWithName(): ?string
     {
-        return $this->message->headers->to;
+        $header = $this->message->headers->to;
+        if (str_contains($header, ',')) {
+            return $this->recipient;
+        }
+
+        return $header;
     }
 
     public function __toString(): string
