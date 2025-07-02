@@ -40,10 +40,20 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.3.0 - 2025-07-02
+
+### What's Changed
+
+* Add HtmlLine() to MailMessage by @henryavila in https://github.com/henryavila/email-tracking/pull/38
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot in https://github.com/henryavila/email-tracking/pull/37
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.2.1...v6.3.0
 
 ## v6.2.1 - 2025-05-12
 
