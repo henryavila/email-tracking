@@ -41,10 +41,19 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## v6.3.1 - 2025-10-02
+
+### What's Changed
+
+* Fix Delivery Status error by @henryavila in https://github.com/henryavila/email-tracking/pull/40
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.3.0...v6.3.1
 
 ## v6.3.0 - 2025-07-02
 
