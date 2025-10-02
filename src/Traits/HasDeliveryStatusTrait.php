@@ -19,7 +19,7 @@ trait HasDeliveryStatusTrait
 
     public function getDeliveryAttemptNumber(): int
     {
-        return $this->deliveryStatus->attemptNumber;
+        return $this->deliveryStatus->attemptNumber ?? 0;
     }
 
     public function hasDeliveryMessage(): bool
