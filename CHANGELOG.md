@@ -42,10 +42,18 @@ All notable changes to `email-tracking` will be documented in this file.
 
 
 
+
 ```
 The docs have been updated to reflect this change.
 
 **Full Changelog**: https://github.com/henryavila/email-tracking/compare/2.0.0...2.1.0
+
+## Enhance blankLine method and add htmlLineIf method - 2025-12-05
+
+- `->blankLine()` now allow multiple lines to be added
+- Added `->htmlLineIf ()`
+
+**Full Changelog**: https://github.com/henryavila/email-tracking/compare/v6.3.1...v6.4.0
 
 ## v6.3.1 - 2025-10-02
 
