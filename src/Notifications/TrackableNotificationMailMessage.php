@@ -24,9 +24,21 @@ class TrackableNotificationMailMessage extends MailMessage
         return $array;
     }
 
-    public function blankLine(): self
+    public function blankLine(int $count = 1): self
     {
-        return $this->line(new HtmlString('<p></p><br />'));
+        for ($i = 0; $i < $count; $i++){
+            $this->line(new HtmlString('<p></p><br />'));            
+        }
+        
+        return $this;
+    }
+
+
+    public function blankLineIf(bool $condition): self
+    {
+        return $condition ?
+            $this->blankLine() :
+            $this;
     }
 
     public function htmlLine(string $line): self
@@ -34,10 +46,10 @@ class TrackableNotificationMailMessage extends MailMessage
         return $this->line(new HtmlString($line));
     }
 
-    public function blankLineIf(bool $condition): self
+    public function htmlLineIf(bool $condition, string $line): self
     {
         return $condition ?
-            $this->blankLine() :
+            $this->line(new HtmlString($line)) :
             $this;
     }
 }
