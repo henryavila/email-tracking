@@ -26,13 +26,12 @@ class TrackableNotificationMailMessage extends MailMessage
 
     public function blankLine(int $count = 1): self
     {
-        for ($i = 0; $i < $count; $i++){
-            $this->line(new HtmlString('<p></p><br />'));            
+        for ($i = 0; $i < $count; $i++) {
+            $this->line(new HtmlString('<p></p><br />'));
         }
-        
+
         return $this;
     }
-
 
     public function blankLineIf(bool $condition): self
     {
