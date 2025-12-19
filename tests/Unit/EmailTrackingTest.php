@@ -8,18 +8,17 @@ use HenryAvila\EmailTracking\Mail\TrackableMail;
 use HenryAvila\EmailTracking\Middleware\Webhooks\MailgunWebhookMiddleware;
 use HenryAvila\EmailTracking\Models\Email;
 use HenryAvila\EmailTracking\Models\User;
-use HenryAvila\EmailTracking\Notifications\SampleNotification;
-use Illuminate\Database\Schema\Blueprint;
+use HenryAvila\EmailTracking\Notifications\TrackableNotificationMailMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Notification as NotificationFacade;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
@@ -29,43 +28,30 @@ use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
+/**
+ * Test Notification class
+ */
+class TestSampleNotification extends Notification
+{
+    public function __construct(public $model) {}
+
+    public function via($notifiable): array
+    {
+        return ['mail'];
+    }
+
+    public function toMail($notifiable): TrackableNotificationMailMessage
+    {
+        return (new TrackableNotificationMailMessage($this->model))
+            ->view('emails.sample')
+            ->subject('Sample Subject');
+    }
+}
+
 beforeEach(function () {
-    Schema::create('emails', function (Blueprint $table) {
-        $table->id();
-        $table->string('message_id')->index();
-        $table->nullableMorphs('sender');
-        $table->string('subject')->nullable();
-        $table->string('to')->nullable();
-        $table->string('cc')->nullable();
-        $table->string('bcc')->nullable();
-        $table->string('reply_to')->nullable();
-        $table->dateTime('delivered_at')->nullable();
-        $table->dateTime('failed_at')->nullable();
-        $table->integer('opened')->default(0);
-        $table->integer('clicked')->default(0);
-        $table->unsignedMediumInteger('delivery_status_attempts')->nullable();
-        $table->text('delivery_status_message')->nullable();
-
-        $table->dateTime('first_opened_at')->nullable();
-        $table->dateTime('first_clicked_at')->nullable();
-        $table->dateTime('last_opened_at')->nullable();
-        $table->dateTime('last_clicked_at')->nullable();
-        $table->text('body_html')->nullable();
-        $table->text('body_txt')->nullable();
-
-        $table->timestamps();
-    });
-    Schema::create('users', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->text('password');
-        $table->timestamps();
-    });
-
+    // Register middleware and routes for webhook tests
     $this->app['router']->aliasMiddleware('mailgun.webhook', MailgunWebhookMiddleware::class);
 
-    // Define the route with the middleware
     Route::middleware(['mailgun.webhook'])->prefix('webhooks')->group(function () {
         Route::post('mailgun', MailgunWebhookController::class)
             ->name('email-tracking.webhooks.mailgun');
@@ -222,8 +208,8 @@ it('can send Custom Notification passing model data', function () {
         MessageSent::class,
     ]);
 
-    Notification::route('mail', $user->email)
-        ->notify(new SampleNotification($user));
+    NotificationFacade::route('mail', $user->email)
+        ->notify(new TestSampleNotification($user));
 
     Event::assertDispatched(MessageSending::class, function (MessageSending $event) use ($user) {
         assertNotEmpty($event->data['model']);
@@ -250,8 +236,8 @@ it('create a email object on custom Notification send', function () {
 
     assertDatabaseCount((new Email)->getTable(), 0);
 
-    Notification::route('mail', $user->email)
-        ->notify(new SampleNotification($user));
+    NotificationFacade::route('mail', $user->email)
+        ->notify(new TestSampleNotification($user));
 
     Event::assertDispatched(MessageSent::class, function (MessageSent $event) use ($user) {
         assertNotEmpty($event->data['model']);

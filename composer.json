@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.2.0",
+        "php": "^8.2",
         "spatie/laravel-package-tools": "^1.9.2",
         "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0",
         "spatie/laravel-permission": "^3.0|^4.0|^5.0|^6.0"
@@ -44,11 +44,12 @@
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "coverage": [
+        "test": "vendor/bin/pest --parallel --cache-directory tests/.cache",
+        "test:coverage": [
             "Composer\\Config::disableProcessTimeout",
-            "XDEBUG_MODE=coverage ./vendor/bin/pest --parallel --cache-directory tests/.cache --coverage-html tests/coverage/html --coverage-xml tests/coverage/xml"
-        ],        "pint": "./vendor/bin/pint"
+            "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage --coverage-html tests/coverage/html --coverage-clover tests/coverage/clover.xml"
+        ],
+        "pint": "./vendor/bin/pint"
     },
     "config": {
         "sort-packages": true,

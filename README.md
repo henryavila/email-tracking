@@ -2,6 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
 [![Total Downloads](https://img.shields.io/packagist/dt/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
+[![codecov](https://codecov.io/gh/henryavila/email-tracking/graph/badge.svg?token=1TMOR3001C)](https://codecov.io/gh/henryavila/email-tracking)
 [![License](https://img.shields.io/packagist/l/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
 
 Track email delivery, opens, clicks, and more using Mailgun webhooks. All data is stored in your database for easy querying and analytics.
@@ -23,6 +24,12 @@ Track email delivery, opens, clicks, and more using Mailgun webhooks. All data i
 - PHP 8.1 or higher
 - Laravel 10.0 or higher
 - Mailgun account
+
+## 📊 Code Coverage
+
+[![Coverage Graph](https://codecov.io/gh/henryavila/email-tracking/graphs/icicle.svg?token=1TMOR3001C)](https://codecov.io/gh/henryavila/email-tracking)
+
+This package maintains high test coverage with comprehensive unit and integration tests. All new features are fully tested before release.
 
 ## 📦 Installation
 
