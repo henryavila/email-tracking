@@ -23,7 +23,29 @@ class TrackableMail extends Mailable implements ShouldQueue
 
         return new Content(
             view: $this->viewName,
-            with: $this->viewData,
+            with: $this->viewData
         );
+    }
+
+    /**
+     * Build the view data array.
+     * Adds email_type to the data if the mailable implements getEmailType() method.
+     *
+     * This allows mailables to categorize emails by implementing a getEmailType() method
+     * that returns a string or BackedEnum value. The email type will be automatically
+     * captured and stored in the emails table for filtering and analytics.
+     *
+     * @return array View data with email_type included if available
+     */
+    public function buildViewData(): array
+    {
+        $data = parent::buildViewData();
+
+        if (method_exists($this, 'getEmailType')) {
+            $emailType = $this->getEmailType();
+            $data['__email_type'] = $emailType instanceof \BackedEnum ? $emailType->value : $emailType;
+        }
+
+        return $data;
     }
 }

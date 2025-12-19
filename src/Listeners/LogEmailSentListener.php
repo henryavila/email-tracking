@@ -11,12 +11,19 @@ use Symfony\Component\Mime\Address;
 class LogEmailSentListener
 {
     /**
-     * This will be trigged when an e-mail will be sent.
-     * If the Mail sender called registerSender(), the sender will be linked to Email object
+     * Handle the MessageSent event.
      *
+     * This listener is triggered when an email is sent. It creates a record in the
+     * emails table with all relevant information including recipients, subject, and
+     * optionally the email type for categorization.
+     *
+     * If the mailable implements getEmailType(), the email will be categorized
+     * accordingly for better organization, filtering, and analytics.
+     *
+     * @param MessageSent $event The email sent event
      * @return void
      */
-    public function handle(MessageSent $event)
+    public function handle(MessageSent $event): void
     {
         $data = [
             'message_id' => preg_replace('([<>])', '', $event->sent->getMessageId()),
@@ -38,6 +45,11 @@ class LogEmailSentListener
                 ->map(fn (Address $address) => $address->getAddress())
                 ->implode(', '),
         ];
+
+        // Capture email_type if available (set by TrackableMail::buildViewData())
+        if (isset($event->data['__email_type'])) {
+            $data['email_type'] = $event->data['__email_type'];
+        }
 
         if (config('email-tracking.log-body-html')) {
             $data['body_html'] = $event->message->getHtmlBody();
