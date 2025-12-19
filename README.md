@@ -17,12 +17,12 @@ Track email delivery, opens, clicks, and more using Mailgun webhooks. All data i
 - 🔒 **Secure Webhooks** - Signature verification for webhook security
 - 💾 **Database Storage** - All email data stored in your database
 - 🧪 **Fully Tested** - Comprehensive test suite included
-- 📱 **Laravel 10+ & 11+** - Modern Laravel support
+- 📱 **Laravel 11+ & 12** - Modern Laravel support with latest features
 
 ## 📋 Requirements
 
-- PHP 8.1 or higher
-- Laravel 10.0 or higher
+- PHP 8.2 or higher
+- Laravel 11.0 or higher (Laravel 11 LTS and Laravel 12 supported)
 - Mailgun account
 
 ## 📊 Code Coverage
@@ -78,8 +78,6 @@ https://yourdomain.com/webhooks/mailgun
 
 The package needs to listen for sent emails to track them.
 
-**Laravel 11+** (Recommended)
-
 Add to `AppServiceProvider::boot()`:
 
 ```php
@@ -90,18 +88,6 @@ public function boot(): void
         listener: \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class
     );
 }
-```
-
-**Laravel 10**
-
-Add to `EventServiceProvider::$listen`:
-
-```php
-protected $listen = [
-    \Illuminate\Mail\Events\MessageSent::class => [
-        \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
-    ],
-];
 ```
 
 ### Configuration File
@@ -184,7 +170,7 @@ class OrderShippedNotification extends Notification
 }
 ```
 
-### Email Type Classification (v6.5.0+)
+### Email Type Classification (v7.0.0+)
 
 Categorize emails for better organization and analytics.
 
@@ -448,22 +434,68 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 ## 💡 Upgrade Guides
 
-### Upgrading to 6.5.0 from 6.4.x
+### Upgrading to 7.0.0 from 6.x - BREAKING CHANGES
 
-Version 6.5.0 adds optional email type classification. **No breaking changes.**
+**Version 7.0.0 drops support for PHP 8.1 and Laravel 9-10.**
 
-**Optional:** To use email type classification:
+#### Requirements
+
+- **PHP 8.2+** (was 8.1+)
+- **Laravel 11+** (was 9+)
+
+#### Why This Change?
+
+Laravel 10 has reached end-of-life and contains known security vulnerabilities. This major version ensures your application uses secure, actively maintained Laravel versions.
+
+#### Migration Path
 
 ```bash
-# Publish new migration
-php artisan vendor:publish --tag="email-tracking-migrations"
-php artisan migrate
+# 1. Update your Laravel application to 11.x first
+composer require laravel/framework:^11.0
 
-# Implement getEmailType() in your mailables
-# See "Email Type Classification" section above
+# 2. Update PHP to 8.2 or higher (if needed)
+
+# 3. Update email-tracking package
+composer require henryavila/email-tracking:^7.0
 ```
 
-### Upgrading to 6.2.0 from earlier versions
+#### Code Changes Required
+
+If you were using Laravel 10's `EventServiceProvider` pattern, migrate to Laravel 11's `AppServiceProvider`:
+
+**Before (Laravel 10):**
+```php
+// EventServiceProvider
+protected $listen = [
+    \Illuminate\Mail\Events\MessageSent::class => [
+        \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class,
+    ],
+];
+```
+
+**After (Laravel 11):**
+```php
+// AppServiceProvider::boot()
+\Illuminate\Support\Facades\Event::listen(
+    events: \Illuminate\Mail\Events\MessageSent::class,
+    listener: \HenryAvila\EmailTracking\Listeners\LogEmailSentListener::class
+);
+```
+
+#### Testing
+
+The package now uses:
+- **Pest 3.x** for testing
+- **PHPUnit 11.x** as test runner
+- **PHPStan Level 4** for static analysis
+
+All tests pass on PHP 8.2, 8.3, 8.4, and 8.5 with Laravel 11 and 12.
+
+---
+
+### Upgrading to 6.2.0 from earlier versions (Legacy)
+
+**Note:** If you're on v6.x, upgrade directly to v7.0.0 using the guide above.
 
 A new migration was added to track email events.
 
