@@ -2,6 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
 [![Total Downloads](https://img.shields.io/packagist/dt/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
+[![Tests](https://github.com/henryavila/email-tracking/actions/workflows/run-tests.yml/badge.svg)](https://github.com/henryavila/email-tracking/actions/workflows/run-tests.yml)
+[![PHPStan](https://github.com/henryavila/email-tracking/actions/workflows/phpstan.yml/badge.svg)](https://github.com/henryavila/email-tracking/actions/workflows/phpstan.yml)
+[![Laravel Pint](https://github.com/henryavila/email-tracking/actions/workflows/laravel-pint.yml/badge.svg)](https://github.com/henryavila/email-tracking/actions/workflows/laravel-pint.yml)
 [![codecov](https://codecov.io/gh/henryavila/email-tracking/graph/badge.svg?token=1TMOR3001C)](https://codecov.io/gh/henryavila/email-tracking)
 [![License](https://img.shields.io/packagist/l/henryavila/email-tracking.svg?style=flat-square)](https://packagist.org/packages/henryavila/email-tracking)
 
@@ -21,7 +24,7 @@ Track email delivery, opens, clicks, and more using Mailgun webhooks. All data i
 
 ## 📋 Requirements
 
-- PHP 8.2 or higher
+- PHP 8.2, 8.3, or 8.4 (PHP 8.5 support planned for v7.1.0)
 - Laravel 11.0 or higher (Laravel 11 LTS and Laravel 12 supported)
 - Mailgun account
 
