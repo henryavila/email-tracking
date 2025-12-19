@@ -1,0 +1,59 @@
+{
+    "event": "delivered",
+    "id": "ygUgVAPxQg-_R91xfiUJrg",
+    "timestamp": 1765567512.0091407,
+    "flags": {
+        "is-authenticated": true,
+        "is-routed": false,
+        "is-big": false,
+        "is-system-test": false,
+        "is-test-mode": false
+    },
+    "message": {
+        "attachments": [
+            {
+                "filename": "zYzOG4p1kH",
+                "content-type": "image/png",
+                "size": 18626
+            }
+        ],
+        "headers": {
+            "message-id": "f787b68095bc31b2e3751948209f14cf@emails.crcmg.org.br",
+            "from": "Registro CRCMG <registro@emails.crcmg.org.br>",
+            "to": "teste@gmail.com",
+            "subject": "Ofício CRCMG-Gereg 0219/2025"
+        },
+        "size": 26247
+    },
+    "storage": {
+        "key": "BAABAAXMH9WesJwU5QNIdre8AJv_BPxYag",
+        "url": "https://storage-us-east4.api.mailgun.net/v3/domains/crcmg.org.br/messages/BAABAAXMH9WesJwU5QNIdre8AJv_BPxYag"
+    },
+    "log-level": "info",
+    "recipient": "teste@gmail.com",
+    "recipient-domain": "gmail.com",
+    "primary-dkim": "mailo._domainkey.crcmg.org.br",
+    "tags": [],
+    "recipient-provider": "Gmail",
+    "campaigns": [],
+    "delivery-status": {
+        "attempt-no": 1,
+        "code": 250,
+        "message": "OK",
+        "description": null,
+        "session-seconds": 1.915,
+        "enhanced-code": null,
+        "mx-host": "gmail-smtp-in.l.google.com",
+        "certificate-verified": true,
+        "tls": true,
+        "utf8": true,
+        "first-delivery-attempt-seconds": 0.054
+    },
+    "envelope": {
+        "sender": "postmaster@crcmg.org.br",
+        "targets": "teste@gmail.com",
+        "transport": "smtp",
+        "sending-ip": "69.72.42.243"
+    },
+    "user-variables": []
+}

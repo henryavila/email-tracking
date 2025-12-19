@@ -1,0 +1,58 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to undefined constant HenryAvila\\EmailTracking\\Events\\Email\\AbstractEmailEvent\:\:CODE\.$#'
+			identifier: classConstant.notFound
+			count: 1
+			path: src/Controllers/MailgunWebhookController.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Illuminate\\Http\\Request\:
+				since Symfony 7\.4, use properties `\-\>attributes`, `query` or `request` directly instead$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: src/Controllers/MailgunWebhookController.php
+
+		-
+			message: '#^Instanceof between HenryAvila\\EmailTracking\\Events\\Email\\ClickedEmailEvent\|HenryAvila\\EmailTracking\\Events\\Email\\OpenedEmailEvent and HenryAvila\\EmailTracking\\Events\\Email\\TemporaryFailureEmailEvent will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: src/Controllers/MailgunWebhookController.php
+
+		-
+			message: '#^Class HenryAvila\\EmailTracking\\DataObjects\\Mailgun\\DeliveryStatus has an uninitialized readonly property \$name\. Assign it in the constructor\.$#'
+			identifier: property.uninitializedReadonly
+			count: 1
+			path: src/DataObjects/Mailgun/DeliveryStatus.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ''HenryAvila\\\\EmailTracking\\\\Events\\\\Email\\\\AbstractEmailEvent'' and ''failed'' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Events/Email/AbstractEmailEvent.php
+
+		-
+			message: '#^Using nullsafe property access on non\-nullable type HenryAvila\\EmailTracking\\DataObjects\\Mailgun\\DeliveryStatus\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: src/Events/Email/TemporaryFailureEmailEvent.php
+
+		-
+			message: '#^PHPDoc type mixed of property HenryAvila\\EmailTracking\\Mail\\TrackableMail\:\:\$viewData is not covariant with PHPDoc type array of overridden property Illuminate\\Mail\\Mailable\:\:\$viewData\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: src/Mail/TrackableMail.php
+
+		-
+			message: '#^Method HenryAvila\\EmailTracking\\Middleware\\Webhooks\\MailgunWebhookMiddleware\:\:buildSignature\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: src/Middleware/Webhooks/MailgunWebhookMiddleware.php
+
+		-
+			message: '#^PHPDoc tag @property has invalid value \(Collection\<Email\> emails\)\: Unexpected token "emails", expected variable at offset 35 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Traits/ModelWithEmailsSenderTrait.php

@@ -16,3 +16,4 @@ report
 .phpunit.*
 tests/.cache
 tests/.coverage
+tests/coverage

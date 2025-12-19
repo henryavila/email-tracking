@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @property int $id
+ * @property string|null $email_type Email Type (optional, for categorization)
  * @property string $message_id
  * @property string $subject
  * @property string $to Destinatário
@@ -38,8 +39,28 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Email extends Model
 {
-    protected $guarded = [
-        'id',
+    protected $fillable = [
+        'message_id',
+        'sender_type',
+        'sender_id',
+        'subject',
+        'email_type',
+        'to',
+        'cc',
+        'bcc',
+        'reply_to',
+        'delivered_at',
+        'failed_at',
+        'opened',
+        'clicked',
+        'delivery_status_attempts',
+        'delivery_status_message',
+        'last_opened_at',
+        'last_clicked_at',
+        'first_opened_at',
+        'first_clicked_at',
+        'body_html',
+        'body_txt',
     ];
 
     protected $casts = [

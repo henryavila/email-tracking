@@ -10,10 +10,10 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.2, 8.3]
+        php: [8.2, 8.3, 8.4]
         laravel: [11.*, 12.*]
         stability: [prefer-stable]
         include:
@@ -40,10 +40,62 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      - name: Get composer cache directory
+        id: composer-cache
+        shell: bash
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: vendor/bin/pest
+        run: vendor/bin/pest --compact
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage Report
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: xdebug
+
+      - name: Get composer cache directory
+        id: composer-cache
+        shell: bash
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Execute tests with coverage
+        run: composer test:coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./tests/coverage/clover.xml
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
