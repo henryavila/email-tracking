@@ -23,5 +23,4 @@ return new class extends Migration
             $table->dropColumn('email_type');
         });
     }
-
 };

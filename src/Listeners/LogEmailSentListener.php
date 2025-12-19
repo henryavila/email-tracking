@@ -20,8 +20,7 @@ class LogEmailSentListener
      * If the mailable implements getEmailType(), the email will be categorized
      * accordingly for better organization, filtering, and analytics.
      *
-     * @param MessageSent $event The email sent event
-     * @return void
+     * @param  MessageSent  $event  The email sent event
      */
     public function handle(MessageSent $event): void
     {
