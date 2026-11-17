@@ -20,12 +20,13 @@ Track email delivery, opens, clicks, and more using Mailgun webhooks. All data i
 - 🔒 **Secure Webhooks** - Signature verification for webhook security
 - 💾 **Database Storage** - All email data stored in your database
 - 🧪 **Fully Tested** - Comprehensive test suite included
-- 📱 **Laravel 11+ & 12** - Modern Laravel support with latest features
+- 📱 **Laravel 11, 12 & 13** - Modern Laravel support with latest features
 
 ## 📋 Requirements
 
-- PHP 8.2, 8.3, or 8.4 (PHP 8.5 support planned for v7.1.0)
-- Laravel 11.0 or higher (Laravel 11 LTS and Laravel 12 supported)
+- PHP 8.2, 8.3, 8.4, or 8.5
+- Laravel 11, 12, or 13
+- spatie/laravel-permission 6, 7, or 8
 - Mailgun account
 
 ## 📊 Code Coverage
@@ -437,6 +438,14 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 ## 💡 Upgrade Guides
 
+### Upgrading to 7.1.0 from 7.0.x
+
+No public API or database changes. `composer require henryavila/email-tracking:^7.0` already accepts this release.
+
+- Laravel 13 is allowed (`illuminate/contracts` `^11.0|^12.0|^13.0`). Laravel 11 and 12 stay supported.
+- `spatie/laravel-permission` `^6.0|^7.0|^8.0`. This package does not call the permission API; the range matches applications that already require 6, 7, or 8.
+- PHP 8.5 is supported. The PHP floor stays 8.2.
+
 ### Upgrading to 7.0.0 from 6.x - BREAKING CHANGES
 
 **Version 7.0.0 drops support for PHP 8.1 and Laravel 9-10.**
@@ -492,7 +501,7 @@ The package now uses:
 - **PHPUnit 11.x** as test runner
 - **PHPStan Level 4** for static analysis
 
-All tests pass on PHP 8.2, 8.3, 8.4, and 8.5 with Laravel 11 and 12.
+All tests pass on PHP 8.2, 8.3, 8.4, and 8.5 with Laravel 11 and 12. The same suite passes on PHP 8.5 with Laravel 13.
 
 ---
 
